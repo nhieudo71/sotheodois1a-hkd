@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Sổ Doanh Thu S1a-HKD</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
@@ -20,6 +20,8 @@
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
   --shadow-lg:0 8px 32px rgba(0,0,0,.12);
   --radius:12px; --radius-sm:8px;
+  --header-h: 56px;
+  --sidebar-w: 220px;
 }
 [data-theme="dark"] {
   --bg:#0f1117; --surface:#1a1d27; --surface2:#21253a; --surface3:#252a3d;
@@ -33,33 +35,67 @@
   --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
   --shadow-lg:0 8px 32px rgba(0,0,0,.4);
 }
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:14px;scroll-behavior:smooth}
-body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
-.header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:12px;height:56px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+html{font-size:14px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;transition:background .3s,color .3s;overflow-x:hidden}
+
+/* ── HEADER ── */
+.header{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 16px;display:flex;align-items:center;gap:10px;
+  height:var(--header-h);position:sticky;top:0;z-index:200;
+  box-shadow:var(--shadow);
+}
 .header-logo{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700;flex-shrink:0}
-.header-title{font-weight:700;font-size:15px}.header-sub{font-size:11px;color:var(--text3)}
-.header-spacer{flex:1}.header-actions{display:flex;gap:8px;align-items:center}
-.layout{display:flex;min-height:calc(100vh - 56px)}
-.sidebar{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:16px 12px;display:flex;flex-direction:column;gap:4px;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.header-title{font-weight:700;font-size:15px;white-space:nowrap}
+.header-sub{font-size:11px;color:var(--text3);white-space:nowrap}
+.header-spacer{flex:1;min-width:0}
+.header-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
+/* hamburger only on mobile */
+.btn-hamburger{display:none;padding:8px;font-size:20px;background:none;border:none;cursor:pointer;color:var(--text2);border-radius:var(--radius-sm)}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:calc(100vh - var(--header-h));min-height:calc(100dvh - var(--header-h));position:relative}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;background:var(--surface);
+  border-right:1px solid var(--border);padding:16px 12px;
+  display:flex;flex-direction:column;gap:4px;
+  position:sticky;top:var(--header-h);
+  height:calc(100vh - var(--header-h));height:calc(100dvh - var(--header-h));
+  overflow-y:auto;transition:transform .25s ease;
+}
+.sidebar-overlay{display:none;position:fixed;inset:0;z-index:149;background:rgba(0,0,0,.4);backdrop-filter:blur(2px)}
+
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:all .15s;border:none;background:none;width:100%;text-align:left}
 .nav-item:hover{background:var(--surface2);color:var(--text)}.nav-item.active{background:var(--accent-soft);color:var(--accent)}
-.nav-icon{font-size:16px}.nav-divider{height:1px;background:var(--border);margin:8px 0}
+.nav-icon{font-size:16px;flex-shrink:0}
+.nav-divider{height:1px;background:var(--border);margin:8px 0}
 .nav-section{font-size:10px;font-weight:700;color:var(--text3);padding:4px 12px;letter-spacing:.08em;text-transform:uppercase}
-.main{flex:1;padding:24px;overflow:hidden}
+
+/* ── MAIN ── */
+.main{flex:1;padding:20px;overflow:hidden;min-width:0}
 .panel{display:none}.panel.active{display:block}
+
+/* ── CARDS ── */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px}
-.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .card-title{font-weight:700;font-size:15px}.card-sub{font-size:12px;color:var(--text3);margin-top:1px}
-.card-body{padding:20px}.card-spacer{flex:1}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow)}
-.stat-label{font-size:12px;color:var(--text3);font-weight:500}
-.stat-value{font-size:22px;font-weight:700;margin-top:6px;font-family:'JetBrains Mono',monospace}
+.card-body{padding:16px}.card-spacer{flex:1;min-width:0}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
+.stat-label{font-size:11px;color:var(--text3);font-weight:500}
+.stat-value{font-size:20px;font-weight:700;margin-top:5px;font-family:'JetBrains Mono',monospace;word-break:break-all}
 .stat-sub{font-size:11px;color:var(--text3);margin-top:3px}
 .stat-blue .stat-value{color:var(--accent)}.stat-green .stat-value{color:var(--success)}
 .stat-orange .stat-value{color:var(--warning)}.stat-purple .stat-value{color:var(--purple)}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;text-decoration:none}
 .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{filter:brightness(1.1)}
 .btn-success{background:var(--success);color:#fff}.btn-success:hover{filter:brightness(1.1)}
 .btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{filter:brightness(1.1)}
@@ -67,19 +103,23 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .btn-purple{background:var(--purple);color:#fff}.btn-purple:hover{filter:brightness(1.1)}
 .btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}.btn-ghost:hover{background:var(--surface2);color:var(--text)}
 .btn-sm{padding:5px 10px;font-size:12px}.btn-icon{padding:7px;font-size:15px}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:var(--surface2);color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:480px}
+th{background:var(--surface2);color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--surface2)}
 .td-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);white-space:nowrap}
 .td-money{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--success);text-align:right;white-space:nowrap}
-.td-items{font-size:12px;color:var(--text2);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.td-items{font-size:12px;color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .td-actions{white-space:nowrap;display:flex;gap:4px}
 .month-header-row td{background:var(--surface3)!important;font-weight:700;font-size:12px;color:var(--text2)}
 .totals-row td{font-weight:700;background:var(--accent-soft);font-size:13px}
-.pagination{display:flex;align-items:center;gap:6px;padding:14px 20px;border-top:1px solid var(--border);flex-wrap:wrap}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;gap:6px;padding:12px 16px;border-top:1px solid var(--border);flex-wrap:wrap}
 .page-info{font-size:12px;color:var(--text3);flex:1;min-width:120px}
 .page-btn{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 8px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;border:1px solid var(--border2);background:var(--surface);color:var(--text2);transition:all .15s}
 .page-btn:hover:not(:disabled){background:var(--surface2);color:var(--text);border-color:var(--accent)}
@@ -87,40 +127,52 @@ tr:hover td{background:var(--surface2)}
 .page-btn:disabled{opacity:.35;cursor:not-allowed}
 .page-jump{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)}
 .page-jump input{width:52px;padding:5px 8px;font-size:12px;text-align:center}
-.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+
+/* ── FORMS ── */
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .form-group{display:flex;flex-direction:column;gap:6px}.form-group.full{grid-column:1/-1}
 label{font-size:12px;font-weight:600;color:var(--text2)}
-input,textarea,select{padding:9px 12px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;background:var(--surface);color:var(--text);transition:border .15s;outline:none}
+input,textarea,select{padding:9px 12px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;background:var(--surface);color:var(--text);transition:border .15s;outline:none;width:100%}
 input:focus,textarea:focus,select:focus{border-color:var(--accent)}
 textarea{resize:vertical;min-height:80px}
-.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.show{opacity:1;pointer-events:all}
-.modal{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-lg);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;transform:translateY(12px);transition:transform .2s}
+.modal{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-lg);width:100%;max-width:600px;max-height:92vh;max-height:92dvh;overflow-y:auto;transform:translateY(12px);transition:transform .2s}
 .modal-overlay.show .modal{transform:translateY(0)}
 .modal-wide{max-width:860px}
-.modal-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.modal-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--surface);z-index:1}
 .modal-title{font-weight:700;font-size:15px;flex:1}
-.modal-body{padding:20px;display:flex;flex-direction:column;gap:16px}
-.modal-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.modal-body{padding:18px;display:flex;flex-direction:column;gap:14px}
+.modal-footer{padding:14px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;position:sticky;bottom:0;background:var(--surface);z-index:1}
+
+/* ── TOGGLE ── */
 .toggle{width:38px;height:22px;background:var(--border2);border-radius:11px;position:relative;cursor:pointer;border:none;transition:background .2s;flex-shrink:0}
 .toggle::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .toggle.on{background:var(--accent)}.toggle.on::after{left:19px}
+
+/* ── BADGES ── */
 .badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:600}
 .badge-blue{background:var(--accent-soft);color:var(--accent)}
 .badge-green{background:var(--success-soft);color:var(--success)}
 .badge-red{background:var(--danger-soft);color:var(--danger)}
 .badge-orange{background:var(--warning-soft);color:var(--warning)}
 .badge-purple{background:var(--purple-soft);color:var(--purple)}
+
+/* ── SETTINGS ── */
 .settings-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
-.settings-row:last-child{border-bottom:none}.settings-info{flex:1}
+.settings-row:last-child{border-bottom:none}.settings-info{flex:1;min-width:0}
 .settings-label{font-weight:600;font-size:13px}.settings-desc{font-size:12px;color:var(--text3);margin-top:2px}
-.upload-zone{border:2px dashed var(--border2);border-radius:var(--radius);padding:36px 20px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surface2)}
+
+/* ── UPLOAD ── */
+.upload-zone{border:2px dashed var(--border2);border-radius:var(--radius);padding:32px 16px;text-align:center;cursor:pointer;transition:all .15s;background:var(--surface2)}
 .upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--accent-soft)}
-.upload-icon{font-size:40px;margin-bottom:12px}
+.upload-icon{font-size:36px;margin-bottom:10px}
 .upload-text{font-weight:600;color:var(--text2)}.upload-sub{font-size:12px;color:var(--text3);margin-top:4px}
 .file-list{display:flex;flex-direction:column;gap:6px;margin-top:12px}
-.file-item{display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px}
-.file-item-name{flex:1;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px}
+.file-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px}
+.file-item-name{flex:1;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .fi-ok{color:var(--success);font-size:11px;font-weight:600;white-space:nowrap}
 .fi-err{color:var(--danger);font-size:11px;font-weight:600;white-space:nowrap}
 .fi-loading{color:var(--text3);font-size:11px;white-space:nowrap}
@@ -132,34 +184,147 @@ textarea{resize:vertical;min-height:80px}
 .dup-box-title{font-weight:700;color:var(--warning);margin-bottom:8px}
 .section-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600}
-.filter-bar{display:flex;gap:10px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.filter-bar input,.filter-bar select{padding:7px 10px;font-size:13px}
-#toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{padding:12px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:#fff;box-shadow:var(--shadow-lg);animation:slideIn .2s ease;display:flex;align-items:center;gap:8px;max-width:400px}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.filter-bar input,.filter-bar select{padding:7px 10px;font-size:13px;width:auto}
+
+/* ── TOAST ── */
+#toast-container{position:fixed;bottom:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:calc(100vw - 32px)}
+.toast{padding:11px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:#fff;box-shadow:var(--shadow-lg);animation:slideIn .2s ease;display:flex;align-items:center;gap:8px;word-break:break-word}
 .toast-success{background:var(--success)}.toast-error{background:var(--danger)}
 .toast-info{background:var(--accent)}.toast-warning{background:var(--warning)}
 @keyframes slideIn{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
-.empty{text-align:center;padding:60px 20px;color:var(--text3)}
-.empty-icon{font-size:48px;margin-bottom:12px}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:48px 16px;color:var(--text3)}
+.empty-icon{font-size:40px;margin-bottom:10px}
 .empty-text{font-size:15px;font-weight:600;color:var(--text2)}.empty-sub{font-size:13px;margin-top:6px}
-@media(max-width:768px){.sidebar{display:none}.stats-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.main{padding:14px}}
+
+/* ── BACKUP GRID ── */
+.backup-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ═══════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+═══════════════════════════════════ */
+
+/* ── Tablet 1024px ── */
+@media(max-width:1024px){
+  :root{--sidebar-w:190px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-value{font-size:17px}
+}
+
+/* ── Tablet 768px ── */
+@media(max-width:768px){
+  :root{--sidebar-w:240px}
+  .btn-hamburger{display:flex;align-items:center;justify-content:center}
+  .header-sub{display:none}
+
+  /* Sidebar becomes off-canvas drawer */
+  .sidebar{
+    position:fixed;top:0;left:0;
+    height:100vh;height:100dvh;
+    z-index:150;
+    transform:translateX(-100%);
+    padding-top:calc(var(--header-h) + 12px);
+    box-shadow:var(--shadow-lg);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay{display:block;opacity:0;pointer-events:none;transition:opacity .25s}
+  .sidebar-overlay.open{opacity:1;pointer-events:all}
+
+  .main{padding:12px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .form-grid{grid-template-columns:1fr}
+  .card-header{padding:12px 14px}
+  .card-body{padding:14px}
+
+  /* Hide header action labels, show only icons on very small */
+  .btn-label-hide{display:none}
+
+  .backup-grid{grid-template-columns:1fr}
+  .filter-bar{gap:6px}
+  .filter-bar input[type="month"]{width:130px}
+
+  table{min-width:420px}
+  .td-items{max-width:140px}
+}
+
+/* ── Mobile 480px ── */
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .stat-card{padding:12px}
+  .stat-value{font-size:15px}
+  .stat-label{font-size:10px}
+
+  .header-actions .btn-sm:not(.btn-icon){display:none}
+  .header-actions .btn-icon{display:inline-flex}
+  /* Show important actions as icon-only */
+  .h-export-btn .btn-label{display:none}
+  .h-import-btn .btn-label{display:none}
+
+  .card-header{flex-direction:column;align-items:flex-start;gap:8px}
+  .card-spacer{display:none}
+
+  .modal-overlay{padding:8px}
+  .modal{max-height:96vh;max-height:96dvh;border-radius:var(--radius)}
+  .modal-wide{max-width:100%}
+
+  .filter-bar{flex-direction:column;align-items:stretch}
+  .filter-bar input,.filter-bar select{width:100%}
+
+  .pagination{gap:4px}
+  .page-jump{display:none}
+  .page-info{width:100%;text-align:center;order:-1}
+
+  table{font-size:12px;min-width:380px}
+  th,td{padding:8px 10px}
+  .td-items{max-width:110px}
+
+  .backup-grid{grid-template-columns:1fr}
+
+  #toast-container{bottom:10px;right:10px;left:10px}
+
+  .dup-box .btn{font-size:11px;padding:5px 8px}
+}
+
+/* ── Very small 360px ── */
+@media(max-width:360px){
+  :root{--header-h:50px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-value{font-size:14px}
+  .header-logo{width:28px;height:28px;font-size:13px}
+  .header-title{font-size:13px}
+  .main{padding:10px}
+}
 </style>
 </head>
 <body>
 
 <header class="header">
+  <button class="btn-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
   <div class="header-logo">S</div>
-  <div><div class="header-title">Sổ Doanh Thu S1a-HKD</div><div class="header-sub">Thông tư 152/2025/TT-BTC</div></div>
+  <div>
+    <div class="header-title">Sổ Doanh Thu S1a-HKD</div>
+    <div class="header-sub">Thông tư 152/2025/TT-BTC</div>
+  </div>
   <div class="header-spacer"></div>
   <div class="header-actions">
-    <button class="btn btn-ghost btn-sm" onclick="showPanel('import')">📥 Nhập file</button>
-    <button class="btn btn-success btn-sm" onclick="exportExcel()">📊 Xuất Excel</button>
+    <button class="btn btn-ghost btn-sm h-import-btn" onclick="showPanel('import')">
+      <span>📥</span><span class="btn-label"> Nhập file</span>
+    </button>
+    <button class="btn btn-success btn-sm h-export-btn" onclick="exportExcel()">
+      <span>📊</span><span class="btn-label"> Xuất Excel</span>
+    </button>
     <button class="btn btn-icon btn-ghost" onclick="toggleTheme()" id="themeBtn">🌙</button>
   </div>
 </header>
 
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
 <div class="layout">
-  <nav class="sidebar">
+  <nav class="sidebar" id="sidebar">
     <div class="nav-section">Menu chính</div>
     <button class="nav-item active" onclick="showPanel('dashboard')" id="nav-dashboard"><span class="nav-icon">📊</span>Tổng quan</button>
     <button class="nav-item" onclick="showPanel('records')" id="nav-records"><span class="nav-icon">📋</span>Dữ liệu sổ</button>
@@ -205,7 +370,7 @@ textarea{resize:vertical;min-height:80px}
         </div>
         <div class="filter-bar">
           <input type="month" id="filter-month" onchange="currentPage=1;renderRecords()" style="width:150px">
-          <input type="text" id="filter-search" oninput="currentPage=1;renderRecords()" placeholder="🔍 Tìm kiếm..." style="flex:1;min-width:180px">
+          <input type="text" id="filter-search" oninput="currentPage=1;renderRecords()" placeholder="🔍 Tìm kiếm..." style="flex:1;min-width:140px">
           <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Bỏ lọc</button>
           <span id="record-count-label" class="badge badge-blue">0 bản ghi</span>
         </div>
@@ -225,7 +390,7 @@ textarea{resize:vertical;min-height:80px}
         <div class="card-header">
           <div>
             <div class="card-title">📥 Nhập dữ liệu từ file Excel</div>
-            <div class="card-sub">Hỗ trợ nhập hàng loạt — chọn 1 hoặc nhiều file cùng lúc (1 tháng = 31 file)</div>
+            <div class="card-sub">Hỗ trợ nhập hàng loạt — chọn 1 hoặc nhiều file cùng lúc</div>
           </div>
         </div>
         <div class="card-body">
@@ -233,21 +398,19 @@ textarea{resize:vertical;min-height:80px}
             Tự động đọc cột <strong>Ngày BC / Ngày bán</strong>, <strong>Mặt hàng</strong> và <strong>Doanh Thu</strong> — gom nhiều mặt hàng cùng ngày thành 1 dòng.<br>
             Nếu ngày đã có trong sổ → <strong>hiển thị cảnh báo</strong> và hỏi trước khi xử lý.
           </p>
-
           <div class="upload-zone" id="upload-zone"
             onclick="document.getElementById('file-input').click()"
             ondragover="event.preventDefault();this.classList.add('drag')"
             ondragleave="this.classList.remove('drag')"
             ondrop="handleFileDrop(event)">
             <div class="upload-icon">📂</div>
-            <div class="upload-text">Kéo thả file vào đây hoặc click để chọn</div>
-            <div class="upload-sub">Định dạng .xlsx / .xls &nbsp;·&nbsp; Ctrl+Click để chọn nhiều file cùng lúc</div>
+            <div class="upload-text">Kéo thả file vào đây hoặc nhấn để chọn</div>
+            <div class="upload-sub">Định dạng .xlsx / .xls &nbsp;·&nbsp; Ctrl+Click để chọn nhiều file</div>
           </div>
           <input type="file" id="file-input" accept=".xlsx,.xls" multiple style="display:none" onchange="handleFileInput(event)">
 
-          <!-- File queue -->
           <div id="file-queue-wrap" style="display:none;margin-top:16px">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
               <div class="section-label" style="margin:0">Danh sách file đã chọn</div>
               <span id="queue-badge" class="badge badge-blue"></span>
               <span id="queue-ok-badge" class="badge badge-green" style="display:none"></span>
@@ -262,7 +425,6 @@ textarea{resize:vertical;min-height:80px}
             </div>
           </div>
 
-          <!-- Preview -->
           <div id="import-preview" style="display:none;margin-top:18px">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
               <div class="section-label" style="margin:0">Xem trước dữ liệu tổng hợp</div>
@@ -270,18 +432,17 @@ textarea{resize:vertical;min-height:80px}
               <span id="preview-dup-badge" class="badge badge-red" style="display:none"></span>
             </div>
 
-            <!-- Dup warning -->
-            <div id="dup-warning" style="display:none" class="dup-box" style="margin-bottom:14px">
+            <div id="dup-warning" style="display:none" class="dup-box">
               <div class="dup-box-title">⚠️ Phát hiện ngày trùng lặp trong sổ!</div>
               <div style="color:var(--text);margin-bottom:12px;line-height:1.6" id="dup-summary-text"></div>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="btn btn-warning btn-sm" onclick="setDupAction('overwrite')">🔄 Ghi đè tất cả ngày trùng</button>
-                <button class="btn btn-ghost btn-sm" onclick="setDupAction('skip')">⏭ Bỏ qua tất cả ngày trùng</button>
-                <button class="btn btn-purple btn-sm" onclick="showDupDetail()">🔍 Xem chi tiết & chọn từng ngày</button>
+                <button class="btn btn-warning btn-sm" onclick="setDupAction('overwrite')">🔄 Ghi đè tất cả</button>
+                <button class="btn btn-ghost btn-sm" onclick="setDupAction('skip')">⏭ Bỏ qua tất cả</button>
+                <button class="btn btn-purple btn-sm" onclick="showDupDetail()">🔍 Xem chi tiết</button>
               </div>
             </div>
 
-            <div class="table-wrap" style="max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm)">
+            <div class="table-wrap" style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm)">
               <table>
                 <thead><tr><th>Ngày bán</th><th>Nguồn file</th><th>Mặt hàng</th><th style="text-align:right">Doanh thu (đ)</th><th>Trạng thái</th></tr></thead>
                 <tbody id="preview-tbody"></tbody>
@@ -289,7 +450,7 @@ textarea{resize:vertical;min-height:80px}
             </div>
 
             <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-              <button class="btn btn-primary" onclick="confirmImport()">✅ Xác nhận nhập dữ liệu</button>
+              <button class="btn btn-primary" onclick="confirmImport()">✅ Xác nhận nhập</button>
               <button class="btn btn-ghost" onclick="cancelImport()">✕ Hủy</button>
               <div id="dup-action-chip"></div>
             </div>
@@ -334,15 +495,15 @@ textarea{resize:vertical;min-height:80px}
       <div class="card">
         <div class="card-header"><div class="card-title">💾 Sao lưu & Khôi phục</div></div>
         <div class="card-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-            <div style="padding:20px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface2)">
-              <div style="font-size:28px;margin-bottom:8px">⬇️</div>
+          <div class="backup-grid">
+            <div style="padding:18px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface2)">
+              <div style="font-size:26px;margin-bottom:8px">⬇️</div>
               <div style="font-weight:700;margin-bottom:6px">Xuất bản sao lưu</div>
               <div style="font-size:12px;color:var(--text3);margin-bottom:14px">Tải xuống file JSON chứa toàn bộ dữ liệu và cài đặt</div>
               <button class="btn btn-primary" onclick="exportBackup()">Tải về backup.json</button>
             </div>
-            <div style="padding:20px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface2)">
-              <div style="font-size:28px;margin-bottom:8px">⬆️</div>
+            <div style="padding:18px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface2)">
+              <div style="font-size:26px;margin-bottom:8px">⬆️</div>
               <div style="font-weight:700;margin-bottom:6px">Nhập bản sao lưu</div>
               <div style="font-size:12px;color:var(--text3);margin-bottom:14px">Khôi phục từ file JSON đã sao lưu trước đó</div>
               <button class="btn btn-ghost" onclick="document.getElementById('restore-input').click()">Chọn file JSON</button>
@@ -384,20 +545,20 @@ textarea{resize:vertical;min-height:80px}
 <div class="modal-overlay" id="modal-dup" onclick="if(event.target===this)closeDupModal()">
   <div class="modal modal-wide">
     <div class="modal-header">
-      <div class="modal-title">🔍 Chi tiết ngày trùng — Chọn hành động từng ngày</div>
+      <div class="modal-title">🔍 Chi tiết ngày trùng</div>
       <button class="btn btn-ghost btn-icon" onclick="closeDupModal()">✕</button>
     </div>
     <div class="modal-body" style="padding:0">
-      <div style="padding:12px 20px;background:var(--warning-soft);font-size:13px;color:var(--warning);border-bottom:1px solid var(--border)">
-        ⚠️ Các ngày dưới đây đã có dữ liệu trong sổ. Chọn: <strong>Ghi đè</strong> (dùng số mới từ file) hoặc <strong>Bỏ qua</strong> (giữ nguyên số cũ).
+      <div style="padding:12px 16px;background:var(--warning-soft);font-size:13px;color:var(--warning);border-bottom:1px solid var(--border)">
+        ⚠️ Các ngày dưới đây đã có dữ liệu trong sổ. Chọn <strong>Ghi đè</strong> hoặc <strong>Bỏ qua</strong> cho từng ngày.
       </div>
-      <div style="padding:10px 20px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <span style="font-size:12px;color:var(--text3);font-weight:600">Áp dụng cho tất cả:</span>
+      <div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:12px;color:var(--text3);font-weight:600">Áp dụng tất cả:</span>
         <button class="btn btn-warning btn-sm" onclick="setAllDupRows('overwrite')">🔄 Ghi đè tất cả</button>
         <button class="btn btn-ghost btn-sm" onclick="setAllDupRows('skip')">⏭ Bỏ qua tất cả</button>
       </div>
-      <div class="table-wrap" style="max-height:420px;overflow-y:auto">
-        <table>
+      <div class="table-wrap" style="max-height:400px;overflow-y:auto">
+        <table style="min-width:520px">
           <thead>
             <tr>
               <th style="width:90px">Ngày</th>
@@ -428,13 +589,23 @@ let settings = { name:'', address:'', mst:'', ddk:'', unit:'Đồng', theme:'lig
 let editingId = null;
 let fileQueue = [];
 let pendingImport = [];
-let dupAction = 'ask'; // 'overwrite' | 'skip' | 'mixed' | 'ask'
-let dupChoices = {};   // date -> 'overwrite' | 'skip'
+let dupAction = 'ask';
+let dupChoices = {};
 
 // ═══ INIT ═══
 document.addEventListener('DOMContentLoaded', () => {
   loadFromStorage(); loadSettingsUI(); applyTheme(); renderAll();
 });
+
+// ═══ SIDEBAR TOGGLE (mobile) ═══
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
 
 // ═══ STORAGE ═══
 function saveToStorage() {
@@ -477,6 +648,7 @@ function showPanel(name) {
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
   const nav=document.getElementById('nav-'+name); if(nav) nav.classList.add('active');
+  closeSidebar();
   if(name==='records') renderRecords();
   if(name==='dashboard') renderDashboard();
 }
@@ -485,10 +657,9 @@ function showPanel(name) {
 function renderAll() { renderDashboard(); renderRecords(); }
 function fmt(n) { return Number(n||0).toLocaleString('vi-VN'); }
 
-// ─── Pagination state ───
 const PAGE_SIZE = 31;
 let currentPage = 1;
-let filteredData = []; // cache for pagination
+let filteredData = [];
 
 function renderDashboard() {
   const total = records.reduce((s,r)=>s+(r.amount||0),0);
@@ -535,10 +706,8 @@ function renderRecords(resetPage) {
     return;
   }
 
-  // Slice for current page
   const startIdx = (currentPage-1)*PAGE_SIZE;
   const pageData = filteredData.slice(startIdx, startIdx+PAGE_SIZE);
-  const pageTotal = pageData.reduce((s,r)=>s+(r.amount||0),0);
 
   let html='', lastMonth='';
   pageData.forEach((r, i)=>{
@@ -546,9 +715,8 @@ function renderRecords(resetPage) {
     const mo=(r.date||'').substring(0,7);
     if(mo!==lastMonth){
       const [y,m]=mo.split('-');
-      // Month total within this page only (show full month total from filteredData)
       const mt=filteredData.filter(x=>x.date&&x.date.startsWith(mo)).reduce((s,x)=>s+(x.amount||0),0);
-      html+=`<tr class="month-header-row"><td colspan="5" style="padding:8px 14px">📅 Tháng ${m}/${y} — Tổng tháng: <strong>${fmt(mt)}</strong> đ</td></tr>`;
+      html+=`<tr class="month-header-row"><td colspan="5" style="padding:8px 12px">📅 Tháng ${m}/${y} — Tổng: <strong>${fmt(mt)}</strong> đ</td></tr>`;
       lastMonth=mo;
     }
     html+=`<tr>
@@ -561,51 +729,43 @@ function renderRecords(resetPage) {
         <button class="btn btn-ghost btn-sm btn-icon" onclick="deleteRecord('${r.id}')">🗑</button>
       </div></td></tr>`;
   });
-  // Page subtotal row
   html+=`<tr class="totals-row">
     <td colspan="3" style="text-align:right">
-      ${totalPages>1 ? `Trang ${currentPage}/${totalPages} (${pageData.length} dòng) &nbsp;·&nbsp; ` : ''}TỔNG CỘNG${totalPages>1?' (toàn bộ)':''}:
+      ${totalPages>1 ? `Trang ${currentPage}/${totalPages} (${pageData.length} dòng) &nbsp;·&nbsp; ` : ''}TỔNG CỘNG:
     </td>
     <td class="td-money" style="font-size:14px">${fmt(grandTotal)}</td>
     <td></td>
   </tr>`;
   tbody.innerHTML=html;
-
   renderPagination(totalPages, filteredData.length);
 }
 
 function renderPagination(totalPages, totalRecords) {
   const pg = document.getElementById('pagination');
   if(totalPages <= 1) { pg.innerHTML=''; return; }
-
   const startR = (currentPage-1)*PAGE_SIZE+1;
   const endR = Math.min(currentPage*PAGE_SIZE, totalRecords);
-
-  // Build page buttons (show max 7 buttons with ellipsis)
   let pages = [];
-  if(totalPages <= 7) {
-    for(let i=1;i<=totalPages;i++) pages.push(i);
-  } else {
+  if(totalPages <= 7) { for(let i=1;i<=totalPages;i++) pages.push(i); }
+  else {
     pages = [1];
     if(currentPage > 3) pages.push('...');
     for(let i=Math.max(2,currentPage-1); i<=Math.min(totalPages-1,currentPage+1); i++) pages.push(i);
     if(currentPage < totalPages-2) pages.push('...');
     pages.push(totalPages);
   }
-
   const btnHtml = pages.map(p => {
     if(p==='...') return `<span style="padding:0 4px;color:var(--text3)">…</span>`;
     return `<button class="page-btn ${p===currentPage?'active':''}" onclick="goToPage(${p})">${p}</button>`;
   }).join('');
-
   pg.innerHTML = `
-    <span class="page-info">Hiển thị <strong>${startR}–${endR}</strong> / ${totalRecords} bản ghi</span>
-    <button class="page-btn" onclick="goToPage(1)" ${currentPage===1?'disabled':''} title="Trang đầu">«</button>
-    <button class="page-btn" onclick="goToPage(${currentPage-1})" ${currentPage===1?'disabled':''} title="Trang trước">‹</button>
+    <span class="page-info">Hiển thị <strong>${startR}–${endR}</strong> / ${totalRecords}</span>
+    <button class="page-btn" onclick="goToPage(1)" ${currentPage===1?'disabled':''}>«</button>
+    <button class="page-btn" onclick="goToPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>
     ${btnHtml}
-    <button class="page-btn" onclick="goToPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''} title="Trang sau">›</button>
-    <button class="page-btn" onclick="goToPage(${totalPages})" ${currentPage===totalPages?'disabled':''} title="Trang cuối">»</button>
-    <span class="page-jump">Đến trang <input type="number" min="1" max="${totalPages}" value="${currentPage}" onchange="goToPage(+this.value)" style="width:52px"></span>
+    <button class="page-btn" onclick="goToPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>
+    <button class="page-btn" onclick="goToPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>
+    <span class="page-jump">Đến trang <input type="number" min="1" max="${totalPages}" value="${currentPage}" onchange="goToPage(+this.value)"></span>
   `;
 }
 
@@ -615,15 +775,13 @@ function goToPage(p) {
   if(p === currentPage) return;
   currentPage = p;
   renderRecords();
-  // Scroll table into view
   document.getElementById('records-tbody').closest('.card').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function clearFilters(){
   document.getElementById('filter-month').value='';
   document.getElementById('filter-search').value='';
-  currentPage=1;
-  renderRecords();
+  currentPage=1; renderRecords();
 }
 
 // ═══ ADD/EDIT ═══
@@ -763,7 +921,6 @@ function parseRows(rows,fileName){
 
 // ═══ PREVIEW & DUPLICATE ═══
 function rebuildPreview(){
-  // Merge across files (same date from multiple files → combine amounts+items)
   const merged={};
   fileQueue.filter(f=>f.status==='ok').forEach(f=>{
     f.parsed.forEach(r=>{
@@ -781,7 +938,6 @@ function rebuildPreview(){
   if(!pendingImport.length){document.getElementById('import-preview').style.display='none';return;}
   const existSet=new Set(records.map(r=>r.date));
   const dups=pendingImport.filter(r=>existSet.has(r.date));
-  // Reset dup choices
   dupAction='ask';dupChoices={};
   dups.forEach(r=>{dupChoices[r.date]='ask';});
   renderPreviewTable(existSet,dups);
@@ -804,12 +960,12 @@ function renderPreviewTable(existSet,dups){
   const tbody=document.getElementById('preview-tbody');
   tbody.innerHTML=pendingImport.map(r=>{
     const isDup=existSet.has(r.date);
-    const st=isDup?`<span class="badge badge-red">⚠️ Trùng ngày</span>`:`<span class="badge badge-green">✓ Mới</span>`;
+    const st=isDup?`<span class="badge badge-red">⚠️ Trùng</span>`:`<span class="badge badge-green">✓ Mới</span>`;
     const rs=isDup?'background:var(--warning-soft)':'';
     const sf=(r.sourceFiles||[r.sourceFile]).join(', ');
     return `<tr style="${rs}">
       <td class="td-date"><strong>${fmtDVN(r.date)}</strong></td>
-      <td style="font-size:11px;color:var(--text3);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(sf)}">${esc(sf)}</td>
+      <td style="font-size:11px;color:var(--text3);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(sf)}">${esc(sf)}</td>
       <td class="td-items" title="${esc(r.items||'')}">${esc(r.items||'—')}</td>
       <td class="td-money">${fmt(r.amount)}</td>
       <td>${st}</td></tr>`;
@@ -842,7 +998,6 @@ function renderDupChip(){
   }
 }
 
-// DUPLICATE DETAIL MODAL
 function showDupDetail(){
   const existSet=new Set(records.map(r=>r.date));
   const dups=pendingImport.filter(r=>existSet.has(r.date));if(!dups.length)return;
@@ -850,25 +1005,24 @@ function showDupDetail(){
   tbody.innerHTML=dups.map(r=>{
     const old=records.find(x=>x.date===r.date);
     const ch=dupChoices[r.date]||'ask';
-    const dateKey=r.date.replace(/-/g,'_'); // safe id
+    const dateKey=r.date.replace(/-/g,'_');
     return `<tr id="duprow-${dateKey}">
       <td class="td-date" style="vertical-align:top;padding-top:13px"><strong>${fmtDVN(r.date)}</strong></td>
-      <td style="font-size:12px;max-width:200px;vertical-align:top">
+      <td style="font-size:12px;max-width:180px;vertical-align:top">
         <div style="font-weight:700;color:var(--danger)">${fmt(old?old.amount:0)} đ</div>
-        <div style="color:var(--text3);font-size:11px;margin-top:2px;word-break:break-word">${esc(old&&old.items?old.items:'(không có mặt hàng)')}</div>
+        <div style="color:var(--text3);font-size:11px;margin-top:2px;word-break:break-word">${esc(old&&old.items?old.items:'(không có)')}</div>
       </td>
-      <td style="font-size:12px;max-width:200px;vertical-align:top">
+      <td style="font-size:12px;max-width:180px;vertical-align:top">
         <div style="font-weight:700;color:var(--success)">${fmt(r.amount)} đ</div>
-        <div style="color:var(--text3);font-size:11px;margin-top:2px;word-break:break-word">${esc(r.items||'(không có mặt hàng)')}</div>
+        <div style="color:var(--text3);font-size:11px;margin-top:2px;word-break:break-word">${esc(r.items||'(không có)')}</div>
       </td>
       <td style="text-align:center;vertical-align:middle">
-        <div style="display:flex;gap:6px;justify-content:center">
+        <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
           <button class="btn btn-sm" id="btn-ow-${dateKey}" onclick="setDupRow('${r.date}','overwrite')">🔄 Ghi đè</button>
           <button class="btn btn-sm" id="btn-sk-${dateKey}" onclick="setDupRow('${r.date}','skip')">⏭ Bỏ qua</button>
         </div>
       </td></tr>`;
   }).join('');
-  // Apply current styles
   dups.forEach(r=>{ const ch=dupChoices[r.date]||'ask'; if(ch!=='ask') _applyDupBtnStyle(r.date,ch); });
   document.getElementById('dup-undecided-warn').style.display='none';
   document.getElementById('modal-dup').classList.add('show');
@@ -903,11 +1057,10 @@ function confirmImport(){
   if(!pendingImport.length) return;
   const existSet=new Set(records.map(r=>r.date));
   const dups=pendingImport.filter(r=>existSet.has(r.date));
-  // Check all dups decided
   if(dups.length){
     const undecided=dups.filter(r=>!dupChoices[r.date]||dupChoices[r.date]==='ask');
     if(undecided.length){
-      toast(`⚠️ Còn ${undecided.length} ngày trùng chưa quyết định! Hãy chọn "Ghi đè", "Bỏ qua" hoặc "Xem chi tiết".`,'warning');
+      toast(`⚠️ Còn ${undecided.length} ngày trùng chưa quyết định!`,'warning');
       document.getElementById('dup-warning').scrollIntoView({behavior:'smooth',block:'center'});
       return;
     }
@@ -926,8 +1079,7 @@ function confirmImport(){
   if(overwritten) parts.push(`Ghi đè ${overwritten} ngày`);
   if(skipped) parts.push(`Bỏ qua ${skipped} ngày trùng`);
   toast('✅ '+parts.join(' · '),'success');
-  currentPage=1;
-  showPanel('records');
+  currentPage=1; showPanel('records');
 }
 
 function cancelImport(){
