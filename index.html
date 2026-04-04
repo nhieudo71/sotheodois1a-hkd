@@ -20,8 +20,7 @@
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
   --shadow-lg:0 8px 32px rgba(0,0,0,.12);
   --radius:12px; --radius-sm:8px;
-  --header-h: 56px;
-  --sidebar-w: 220px;
+  --header-h:56px; --sidebar-w:220px;
 }
 [data-theme="dark"] {
   --bg:#0f1117; --surface:#1a1d27; --surface2:#21253a; --surface3:#252a3d;
@@ -35,13 +34,130 @@
   --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
   --shadow-lg:0 8px 32px rgba(0,0,0,.4);
 }
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:14px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;transition:background .3s,color .3s;overflow-x:hidden}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;overflow-x:hidden}
+
+/* ══════════════════════════════════════
+   AUTH SCREEN
+══════════════════════════════════════ */
+#auth-screen {
+  position:fixed;inset:0;z-index:2000;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#0c4a6e 100%);
+  transition:opacity .4s ease;
+}
+#auth-screen.hide { opacity:0; pointer-events:none; }
+
+.auth-wrap {
+  width:100%;max-width:420px;
+  animation:authIn .5s ease both;
+}
+@keyframes authIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+.auth-logo-row {
+  text-align:center;margin-bottom:28px;
+}
+.auth-logo {
+  display:inline-flex;align-items:center;justify-content:center;
+  width:60px;height:60px;border-radius:18px;
+  background:linear-gradient(135deg,#2563eb,#0ea5e9);
+  font-size:28px;font-weight:800;color:#fff;
+  box-shadow:0 8px 24px rgba(37,99,235,.5);
+  margin-bottom:12px;
+}
+.auth-app-name { color:#fff;font-size:20px;font-weight:700;display:block; }
+.auth-app-sub  { color:rgba(255,255,255,.5);font-size:12px;display:block;margin-top:2px; }
+
+.auth-card {
+  background:var(--surface);border-radius:20px;
+  box-shadow:0 24px 80px rgba(0,0,0,.4);
+  overflow:hidden;
+}
+.auth-tabs {
+  display:flex;border-bottom:1px solid var(--border);
+}
+.auth-tab {
+  flex:1;padding:14px 0;font-size:13px;font-weight:600;
+  background:none;border:none;cursor:pointer;
+  color:var(--text3);border-bottom:2px solid transparent;
+  margin-bottom:-1px;transition:all .2s;font-family:inherit;
+}
+.auth-tab.active { color:var(--accent);border-bottom-color:var(--accent); }
+
+.auth-body { padding:24px; }
+
+.auth-form { display:flex;flex-direction:column;gap:14px; }
+.auth-fg { display:flex;flex-direction:column;gap:6px; }
+.auth-fg label { font-size:12px;font-weight:600;color:var(--text2); }
+.auth-fg input {
+  padding:10px 14px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+  font-size:13px;font-family:inherit;background:var(--surface);color:var(--text);
+  outline:none;transition:border .15s;width:100%;
+}
+.auth-fg input:focus { border-color:var(--accent); }
+
+.auth-forgot {
+  text-align:right;margin-top:-6px;
+}
+.auth-forgot button {
+  background:none;border:none;font-size:12px;color:var(--accent);
+  cursor:pointer;padding:0;font-family:inherit;
+}
+.auth-forgot button:hover { text-decoration:underline; }
+
+.auth-btn {
+  width:100%;padding:11px;border-radius:var(--radius-sm);
+  background:var(--accent);color:#fff;font-size:14px;font-weight:700;
+  border:none;cursor:pointer;transition:filter .15s,opacity .15s;
+  font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.auth-btn:hover { filter:brightness(1.1); }
+.auth-btn:disabled { opacity:.55;cursor:not-allowed; }
+
+.auth-divider {
+  display:flex;align-items:center;gap:10px;
+  color:var(--text3);font-size:12px;margin:2px 0;
+}
+.auth-divider::before,.auth-divider::after {
+  content:'';flex:1;height:1px;background:var(--border);
+}
+
+.auth-google {
+  width:100%;padding:10px;border-radius:var(--radius-sm);
+  background:var(--surface2);color:var(--text);font-size:13px;font-weight:600;
+  border:1.5px solid var(--border2);cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:inherit;
+}
+.auth-google:hover { border-color:var(--accent);background:var(--accent-soft); }
+.auth-google:disabled { opacity:.55;cursor:not-allowed; }
+
+.auth-google svg { width:18px;height:18px;flex-shrink:0; }
+
+.auth-error {
+  padding:10px 14px;background:var(--danger-soft);border:1px solid var(--danger);
+  border-radius:var(--radius-sm);color:var(--danger);font-size:12px;font-weight:500;
+  display:none;
+}
+.auth-error.show { display:block; }
+
+.auth-info {
+  padding:10px 14px;background:var(--accent-soft);border:1px solid var(--accent);
+  border-radius:var(--radius-sm);color:var(--accent);font-size:12px;font-weight:500;
+  display:none;
+}
+.auth-info.show { display:block; }
+
+/* ══════════════════════════════════════
+   MAIN APP
+══════════════════════════════════════ */
+#app { display:none; }
+#app.show { display:block; }
 
 /* ── HEADER ── */
-.header{
+.header {
   background:var(--surface);border-bottom:1px solid var(--border);
   padding:0 16px;display:flex;align-items:center;gap:10px;
   height:var(--header-h);position:sticky;top:0;z-index:200;
@@ -52,11 +168,67 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .header-sub{font-size:11px;color:var(--text3);white-space:nowrap}
 .header-spacer{flex:1;min-width:0}
 .header-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
-/* hamburger only on mobile */
 .btn-hamburger{display:none;padding:8px;font-size:20px;background:none;border:none;cursor:pointer;color:var(--text2);border-radius:var(--radius-sm)}
 
+/* Sync Status Badge */
+.sync-badge {
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;
+  border:1px solid var(--border);color:var(--text3);white-space:nowrap;
+  transition:all .3s;
+}
+.sync-badge .sdot {
+  width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;
+}
+.sync-badge.syncing { color:var(--warning);border-color:var(--warning); }
+.sync-badge.syncing .sdot { background:var(--warning);animation:sdotPulse 1s infinite; }
+.sync-badge.synced  { color:var(--success);border-color:var(--success-soft); }
+.sync-badge.synced .sdot  { background:var(--success); }
+.sync-badge.error   { color:var(--danger);border-color:var(--danger-soft); }
+.sync-badge.error .sdot   { background:var(--danger); }
+@keyframes sdotPulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* User Avatar Dropdown */
+.user-btn {
+  display:flex;align-items:center;gap:8px;
+  padding:4px 8px 4px 4px;border-radius:99px;
+  border:1px solid var(--border2);background:var(--surface2);
+  cursor:pointer;transition:all .15s;flex-shrink:0;
+}
+.user-btn:hover { border-color:var(--accent);background:var(--accent-soft); }
+.user-avatar {
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;
+}
+.user-avatar img { width:100%;height:100%;object-fit:cover; }
+.user-name { font-size:12px;font-weight:600;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+
+.user-dropdown {
+  position:absolute;top:calc(var(--header-h) + 6px);right:12px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow-lg);
+  min-width:220px;z-index:300;
+  opacity:0;pointer-events:none;transform:translateY(-8px);
+  transition:all .2s;
+}
+.user-dropdown.open { opacity:1;pointer-events:all;transform:translateY(0); }
+.ud-header { padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface2); }
+.ud-name  { font-weight:700;font-size:13px; }
+.ud-email { font-size:11px;color:var(--text3);margin-top:2px; }
+.ud-item {
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:11px 16px;font-size:13px;font-weight:500;
+  border:none;background:none;cursor:pointer;color:var(--text2);text-align:left;
+  transition:background .15s;font-family:inherit;
+}
+.ud-item:hover { background:var(--surface2);color:var(--text); }
+.ud-item.danger { color:var(--danger); }
+.ud-item.danger:hover { background:var(--danger-soft); }
+
 /* ── LAYOUT ── */
-.layout{display:flex;min-height:calc(100vh - var(--header-h));min-height:calc(100dvh - var(--header-h));position:relative}
+.layout{display:flex;min-height:calc(100vh - var(--header-h));position:relative}
 
 /* ── SIDEBAR ── */
 .sidebar{
@@ -64,11 +236,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   border-right:1px solid var(--border);padding:16px 12px;
   display:flex;flex-direction:column;gap:4px;
   position:sticky;top:var(--header-h);
-  height:calc(100vh - var(--header-h));height:calc(100dvh - var(--header-h));
-  overflow-y:auto;transition:transform .25s ease;
+  height:calc(100vh - var(--header-h));overflow-y:auto;transition:transform .25s ease;
 }
 .sidebar-overlay{display:none;position:fixed;inset:0;z-index:149;background:rgba(0,0,0,.4);backdrop-filter:blur(2px)}
-
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:all .15s;border:none;background:none;width:100%;text-align:left}
 .nav-item:hover{background:var(--surface2);color:var(--text)}.nav-item.active{background:var(--accent-soft);color:var(--accent)}
 .nav-icon{font-size:16px;flex-shrink:0}
@@ -139,7 +309,7 @@ textarea{resize:vertical;min-height:80px}
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.show{opacity:1;pointer-events:all}
-.modal{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-lg);width:100%;max-width:600px;max-height:92vh;max-height:92dvh;overflow-y:auto;transform:translateY(12px);transition:transform .2s}
+.modal{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-lg);width:100%;max-width:600px;max-height:92vh;overflow-y:auto;transform:translateY(12px);transition:transform .2s}
 .modal-overlay.show .modal{transform:translateY(0)}
 .modal-wide{max-width:860px}
 .modal-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--surface);z-index:1}
@@ -184,8 +354,6 @@ textarea{resize:vertical;min-height:80px}
 .dup-box-title{font-weight:700;color:var(--warning);margin-bottom:8px}
 .section-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:600}
-
-/* ── FILTER BAR ── */
 .filter-bar{display:flex;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .filter-bar input,.filter-bar select{padding:7px 10px;font-size:13px;width:auto}
 
@@ -196,104 +364,58 @@ textarea{resize:vertical;min-height:80px}
 .toast-info{background:var(--accent)}.toast-warning{background:var(--warning)}
 @keyframes slideIn{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
 
-/* ── EMPTY ── */
 .empty{text-align:center;padding:48px 16px;color:var(--text3)}
 .empty-icon{font-size:40px;margin-bottom:10px}
 .empty-text{font-size:15px;font-weight:600;color:var(--text2)}.empty-sub{font-size:13px;margin-top:6px}
-
-/* ── BACKUP GRID ── */
 .backup-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
-/* ═══════════════════════════════════
-   RESPONSIVE BREAKPOINTS
-═══════════════════════════════════ */
-
-/* ── Tablet 1024px ── */
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
 @media(max-width:1024px){
   :root{--sidebar-w:190px}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .stat-value{font-size:17px}
 }
-
-/* ── Tablet 768px ── */
 @media(max-width:768px){
   :root{--sidebar-w:240px}
   .btn-hamburger{display:flex;align-items:center;justify-content:center}
   .header-sub{display:none}
-
-  /* Sidebar becomes off-canvas drawer */
-  .sidebar{
-    position:fixed;top:0;left:0;
-    height:100vh;height:100dvh;
-    z-index:150;
-    transform:translateX(-100%);
-    padding-top:calc(var(--header-h) + 12px);
-    box-shadow:var(--shadow-lg);
-  }
+  .sync-badge span:not(.sdot){display:none}
+  .user-name{display:none}
+  .sidebar{position:fixed;top:0;left:0;height:100vh;z-index:150;transform:translateX(-100%);padding-top:calc(var(--header-h)+12px);box-shadow:var(--shadow-lg);}
   .sidebar.open{transform:translateX(0)}
   .sidebar-overlay{display:block;opacity:0;pointer-events:none;transition:opacity .25s}
   .sidebar-overlay.open{opacity:1;pointer-events:all}
-
   .main{padding:12px}
   .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px}
   .form-grid{grid-template-columns:1fr}
-  .card-header{padding:12px 14px}
-  .card-body{padding:14px}
-
-  /* Hide header action labels, show only icons on very small */
-  .btn-label-hide{display:none}
-
   .backup-grid{grid-template-columns:1fr}
-  .filter-bar{gap:6px}
-  .filter-bar input[type="month"]{width:130px}
-
   table{min-width:420px}
   .td-items{max-width:140px}
 }
-
-/* ── Mobile 480px ── */
 @media(max-width:480px){
-  .stats-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .stats-grid{gap:8px}
   .stat-card{padding:12px}
   .stat-value{font-size:15px}
   .stat-label{font-size:10px}
-
-  .header-actions .btn-sm:not(.btn-icon){display:none}
-  .header-actions .btn-icon{display:inline-flex}
-  /* Show important actions as icon-only */
-  .h-export-btn .btn-label{display:none}
-  .h-import-btn .btn-label{display:none}
-
   .card-header{flex-direction:column;align-items:flex-start;gap:8px}
   .card-spacer{display:none}
-
   .modal-overlay{padding:8px}
-  .modal{max-height:96vh;max-height:96dvh;border-radius:var(--radius)}
+  .modal{max-height:96vh}
   .modal-wide{max-width:100%}
-
   .filter-bar{flex-direction:column;align-items:stretch}
   .filter-bar input,.filter-bar select{width:100%}
-
   .pagination{gap:4px}
   .page-jump{display:none}
   .page-info{width:100%;text-align:center;order:-1}
-
   table{font-size:12px;min-width:380px}
   th,td{padding:8px 10px}
   .td-items{max-width:110px}
-
-  .backup-grid{grid-template-columns:1fr}
-
   #toast-container{bottom:10px;right:10px;left:10px}
-
-  .dup-box .btn{font-size:11px;padding:5px 8px}
 }
-
-/* ── Very small 360px ── */
 @media(max-width:360px){
   :root{--header-h:50px}
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .stat-value{font-size:14px}
   .header-logo{width:28px;height:28px;font-size:13px}
   .header-title{font-size:13px}
   .main{padding:10px}
@@ -301,6 +423,83 @@ textarea{resize:vertical;min-height:80px}
 </style>
 </head>
 <body>
+
+<!-- ════════════════════════════════════
+     AUTH SCREEN
+════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-wrap">
+    <div class="auth-logo-row">
+      <div class="auth-logo">S</div>
+      <span class="auth-app-name">Sổ Doanh Thu S1a-HKD</span>
+      <span class="auth-app-sub">Thông tư 152/2025/TT-BTC · Đồng bộ Firebase</span>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login"  onclick="switchTab('login')">Đăng nhập</button>
+        <button class="auth-tab"        id="tab-signup" onclick="switchTab('signup')">Tạo tài khoản</button>
+      </div>
+
+      <div class="auth-body">
+        <!-- LOGIN FORM -->
+        <div id="form-login" class="auth-form">
+          <div class="auth-fg">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="email@example.com" autocomplete="email">
+          </div>
+          <div class="auth-fg">
+            <label>Mật khẩu</label>
+            <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <div class="auth-forgot">
+            <button onclick="forgotPassword()">Quên mật khẩu?</button>
+          </div>
+          <div class="auth-error" id="login-error"></div>
+          <div class="auth-info"  id="login-info"></div>
+          <button class="auth-btn" id="btn-login" onclick="doLogin()">
+            <span>🔐</span> Đăng nhập
+          </button>
+          <div class="auth-divider">hoặc</div>
+          <button class="auth-google" id="btn-google-login" onclick="doGoogleLogin()">
+            <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+            Tiếp tục với Google
+          </button>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div id="form-signup" class="auth-form" style="display:none">
+          <div class="auth-fg">
+            <label>Email</label>
+            <input type="email" id="signup-email" placeholder="email@example.com" autocomplete="email">
+          </div>
+          <div class="auth-fg">
+            <label>Mật khẩu <span style="color:var(--text3);font-weight:400">(tối thiểu 6 ký tự)</span></label>
+            <input type="password" id="signup-pass" placeholder="••••••••" autocomplete="new-password">
+          </div>
+          <div class="auth-fg">
+            <label>Xác nhận mật khẩu</label>
+            <input type="password" id="signup-pass2" placeholder="••••••••" autocomplete="new-password">
+          </div>
+          <div class="auth-error" id="signup-error"></div>
+          <button class="auth-btn" id="btn-signup" onclick="doSignup()">
+            <span>✨</span> Tạo tài khoản
+          </button>
+          <div class="auth-divider">hoặc</div>
+          <button class="auth-google" id="btn-google-signup" onclick="doGoogleLogin()">
+            <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+            Tiếp tục với Google
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     MAIN APP
+════════════════════════════════════ -->
+<div id="app">
 
 <header class="header">
   <button class="btn-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
@@ -311,13 +510,35 @@ textarea{resize:vertical;min-height:80px}
   </div>
   <div class="header-spacer"></div>
   <div class="header-actions">
-    <button class="btn btn-ghost btn-sm h-import-btn" onclick="showPanel('import')">
+    <!-- Sync Status -->
+    <div class="sync-badge" id="syncBadge">
+      <span class="sdot"></span>
+      <span id="syncText">Đang kết nối...</span>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="showPanel('import')">
       <span>📥</span><span class="btn-label"> Nhập file</span>
     </button>
-    <button class="btn btn-success btn-sm h-export-btn" onclick="exportExcel()">
+    <button class="btn btn-success btn-sm" onclick="exportExcel()">
       <span>📊</span><span class="btn-label"> Xuất Excel</span>
     </button>
     <button class="btn btn-icon btn-ghost" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <!-- User dropdown -->
+    <div style="position:relative">
+      <button class="user-btn" onclick="toggleUserMenu()" id="userBtn">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <span class="user-name" id="userNameHeader">...</span>
+        <span style="font-size:10px;color:var(--text3)">▾</span>
+      </button>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="ud-header">
+          <div class="ud-name"  id="ud-name">...</div>
+          <div class="ud-email" id="ud-email">...</div>
+        </div>
+        <button class="ud-item" onclick="showPanel('settings');closeUserMenu()">⚙️ Cài đặt</button>
+        <button class="ud-item" onclick="showPanel('backup');closeUserMenu()">💾 Sao lưu</button>
+        <button class="ud-item danger" onclick="doLogout()">🚪 Đăng xuất</button>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -327,12 +548,12 @@ textarea{resize:vertical;min-height:80px}
   <nav class="sidebar" id="sidebar">
     <div class="nav-section">Menu chính</div>
     <button class="nav-item active" onclick="showPanel('dashboard')" id="nav-dashboard"><span class="nav-icon">📊</span>Tổng quan</button>
-    <button class="nav-item" onclick="showPanel('records')" id="nav-records"><span class="nav-icon">📋</span>Dữ liệu sổ</button>
-    <button class="nav-item" onclick="showPanel('import')" id="nav-import"><span class="nav-icon">📥</span>Nhập dữ liệu</button>
+    <button class="nav-item" onclick="showPanel('records')"   id="nav-records"><span class="nav-icon">📋</span>Dữ liệu sổ</button>
+    <button class="nav-item" onclick="showPanel('import')"    id="nav-import"><span class="nav-icon">📥</span>Nhập dữ liệu</button>
     <div class="nav-divider"></div>
     <div class="nav-section">Hệ thống</div>
-    <button class="nav-item" onclick="showPanel('settings')" id="nav-settings"><span class="nav-icon">⚙️</span>Cài đặt</button>
-    <button class="nav-item" onclick="showPanel('backup')" id="nav-backup"><span class="nav-icon">💾</span>Sao lưu</button>
+    <button class="nav-item" onclick="showPanel('settings')"  id="nav-settings"><span class="nav-icon">⚙️</span>Cài đặt</button>
+    <button class="nav-item" onclick="showPanel('backup')"    id="nav-backup"><span class="nav-icon">💾</span>Sao lưu</button>
   </nav>
 
   <main class="main">
@@ -431,7 +652,6 @@ textarea{resize:vertical;min-height:80px}
               <span id="preview-new-badge" class="badge badge-green"></span>
               <span id="preview-dup-badge" class="badge badge-red" style="display:none"></span>
             </div>
-
             <div id="dup-warning" style="display:none" class="dup-box">
               <div class="dup-box-title">⚠️ Phát hiện ngày trùng lặp trong sổ!</div>
               <div style="color:var(--text);margin-bottom:12px;line-height:1.6" id="dup-summary-text"></div>
@@ -441,14 +661,12 @@ textarea{resize:vertical;min-height:80px}
                 <button class="btn btn-purple btn-sm" onclick="showDupDetail()">🔍 Xem chi tiết</button>
               </div>
             </div>
-
             <div class="table-wrap" style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm)">
               <table>
                 <thead><tr><th>Ngày bán</th><th>Nguồn file</th><th>Mặt hàng</th><th style="text-align:right">Doanh thu (đ)</th><th>Trạng thái</th></tr></thead>
                 <tbody id="preview-tbody"></tbody>
               </table>
             </div>
-
             <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
               <button class="btn btn-primary" onclick="confirmImport()">✅ Xác nhận nhập</button>
               <button class="btn btn-ghost" onclick="cancelImport()">✕ Hủy</button>
@@ -472,17 +690,21 @@ textarea{resize:vertical;min-height:80px}
             <div class="form-group"><label>Địa điểm kinh doanh</label><input type="text" id="cfg-ddk" placeholder="Số nhà, đường..."></div>
             <div class="form-group"><label>Đơn vị tính tiền</label><input type="text" id="cfg-unit" value="Đồng"></div>
           </div>
-          <div class="section-label">Giao diện & Lưu trữ</div>
+          <div class="section-label">Giao diện & Đồng bộ</div>
           <div class="settings-row">
             <div class="settings-info"><div class="settings-label">Chế độ tối</div><div class="settings-desc">Giao diện tối bảo vệ mắt</div></div>
             <button class="toggle" id="darkToggle" onclick="toggleTheme()"></button>
           </div>
           <div class="settings-row">
-            <div class="settings-info"><div class="settings-label">Lưu trữ cục bộ (LocalStorage)</div><div class="settings-desc">Dữ liệu lưu trên trình duyệt, không gửi lên mạng</div></div>
+            <div class="settings-info"><div class="settings-label">Đồng bộ Firebase (Cloud)</div><div class="settings-desc">Dữ liệu tự động lưu lên đám mây</div></div>
+            <span class="badge badge-green" id="firebase-status-badge">✓ Đang bật</span>
+          </div>
+          <div class="settings-row">
+            <div class="settings-info"><div class="settings-label">Lưu trữ cục bộ (LocalStorage)</div><div class="settings-desc">Dữ liệu cache trên trình duyệt để tải nhanh hơn</div></div>
             <span class="badge badge-green">✓ Đang bật</span>
           </div>
           <div class="settings-row">
-            <div class="settings-info"><div class="settings-label">Xóa toàn bộ dữ liệu</div><div class="settings-desc">Xóa tất cả bản ghi, không thể hoàn tác</div></div>
+            <div class="settings-info"><div class="settings-label">Xóa toàn bộ dữ liệu</div><div class="settings-desc">Xóa tất cả bản ghi khỏi Firestore và thiết bị này</div></div>
             <button class="btn btn-danger btn-sm" onclick="clearAllData()">🗑 Xóa tất cả</button>
           </div>
           <div style="margin-top:20px"><button class="btn btn-primary" onclick="saveSettings()">💾 Lưu cài đặt</button></div>
@@ -511,7 +733,7 @@ textarea{resize:vertical;min-height:80px}
             </div>
           </div>
           <div style="margin-top:16px;padding:14px;background:var(--warning-soft);border-radius:var(--radius-sm);font-size:12px;color:var(--warning)">
-            ⚠️ <strong>Lưu ý:</strong> Nhập sao lưu sẽ GHI ĐÈ toàn bộ dữ liệu hiện tại. Hãy xuất bản sao lưu trước.
+            ⚠️ <strong>Lưu ý:</strong> Nhập sao lưu sẽ GHI ĐÈ toàn bộ dữ liệu hiện tại trên Firestore. Hãy xuất bản sao lưu trước.
           </div>
         </div>
       </div>
@@ -519,6 +741,8 @@ textarea{resize:vertical;min-height:80px}
 
   </main>
 </div>
+
+</div><!-- #app -->
 
 <!-- ADD/EDIT MODAL -->
 <div class="modal-overlay" id="modal-add" onclick="if(event.target===this)closeAddModal()">
@@ -559,14 +783,7 @@ textarea{resize:vertical;min-height:80px}
       </div>
       <div class="table-wrap" style="max-height:400px;overflow-y:auto">
         <table style="min-width:520px">
-          <thead>
-            <tr>
-              <th style="width:90px">Ngày</th>
-              <th>Dữ liệu cũ (trong sổ)</th>
-              <th>Dữ liệu mới (từ file)</th>
-              <th style="text-align:center;width:180px">Hành động</th>
-            </tr>
-          </thead>
+          <thead><tr><th style="width:90px">Ngày</th><th>Dữ liệu cũ (trong sổ)</th><th>Dữ liệu mới (từ file)</th><th style="text-align:center;width:180px">Hành động</th></tr></thead>
           <tbody id="dup-detail-tbody"></tbody>
         </table>
       </div>
@@ -582,99 +799,458 @@ textarea{resize:vertical;min-height:80px}
 
 <div id="toast-container"></div>
 
-<script>
-// ═══ STATE ═══
-let records = [];
-let settings = { name:'', address:'', mst:'', ddk:'', unit:'Đồng', theme:'light' };
+<!-- ════════════════════════════════════
+     FIREBASE + APP SCRIPT
+════════════════════════════════════ -->
+<script type="module">
+// ══ FIREBASE CONFIG ══
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, collection, doc, setDoc, getDoc, getDocs,
+  deleteDoc, onSnapshot, serverTimestamp, writeBatch, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCNYG98NdvQE7I61CG9hXb6ZZBErP3saf0",
+  authDomain: "quan-ly-tai-chinh-ap.firebaseapp.com",
+  projectId: "quan-ly-tai-chinh-ap",
+  storageBucket: "quan-ly-tai-chinh-ap.firebasestorage.app",
+  messagingSenderId: "110566299583",
+  appId: "1:110566299583:web:daf56847b65e692a2cb30a"
+};
+
+const app   = initializeApp(firebaseConfig);
+const auth  = getAuth(app);
+const db    = getFirestore(app);
+const gProvider = new GoogleAuthProvider();
+
+// ── State ──
+let records   = [];
+let settings  = { name:'', address:'', mst:'', ddk:'', unit:'Đồng', theme:'light' };
 let editingId = null;
 let fileQueue = [];
 let pendingImport = [];
 let dupAction = 'ask';
 let dupChoices = {};
-
-// ═══ INIT ═══
-document.addEventListener('DOMContentLoaded', () => {
-  loadFromStorage(); loadSettingsUI(); applyTheme(); renderAll();
-});
-
-// ═══ SIDEBAR TOGGLE (mobile) ═══
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebar-overlay').classList.toggle('open');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-}
-
-// ═══ STORAGE ═══
-function saveToStorage() {
-  try { localStorage.setItem('s1a_records', JSON.stringify(records)); localStorage.setItem('s1a_settings', JSON.stringify(settings)); }
-  catch(e) { toast('Lỗi lưu: '+e.message,'error'); }
-}
-function loadFromStorage() {
-  try {
-    const r = localStorage.getItem('s1a_records'); if(r) records = JSON.parse(r);
-    const s = localStorage.getItem('s1a_settings'); if(s) settings = {...settings,...JSON.parse(s)};
-  } catch(e) {}
-}
-function loadSettingsUI() {
-  document.getElementById('cfg-name').value = settings.name||'';
-  document.getElementById('cfg-address').value = settings.address||'';
-  document.getElementById('cfg-mst').value = settings.mst||'';
-  document.getElementById('cfg-ddk').value = settings.ddk||'';
-  document.getElementById('cfg-unit').value = settings.unit||'Đồng';
-}
-function saveSettings() {
-  settings.name = document.getElementById('cfg-name').value.trim();
-  settings.address = document.getElementById('cfg-address').value.trim();
-  settings.mst = document.getElementById('cfg-mst').value.trim();
-  settings.ddk = document.getElementById('cfg-ddk').value.trim();
-  settings.unit = document.getElementById('cfg-unit').value.trim()||'Đồng';
-  saveToStorage(); toast('Đã lưu cài đặt','success');
-}
-
-// ═══ THEME ═══
-function toggleTheme() { settings.theme = settings.theme==='dark'?'light':'dark'; applyTheme(); saveToStorage(); }
-function applyTheme() {
-  document.documentElement.setAttribute('data-theme', settings.theme);
-  document.getElementById('themeBtn').textContent = settings.theme==='dark'?'☀️':'🌙';
-  const t=document.getElementById('darkToggle'); if(t) t.classList.toggle('on', settings.theme==='dark');
-}
-
-// ═══ PANELS ═══
-function showPanel(name) {
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  const nav=document.getElementById('nav-'+name); if(nav) nav.classList.add('active');
-  closeSidebar();
-  if(name==='records') renderRecords();
-  if(name==='dashboard') renderDashboard();
-}
-
-// ═══ RENDER ═══
-function renderAll() { renderDashboard(); renderRecords(); }
-function fmt(n) { return Number(n||0).toLocaleString('vi-VN'); }
+let currentUser = null;
+let unsubscribe = null;
 
 const PAGE_SIZE = 31;
 let currentPage = 1;
 let filteredData = [];
 
+// ══════════════════════════════════════
+// AUTH FUNCTIONS
+// ══════════════════════════════════════
+onAuthStateChanged(auth, user => {
+  if (user) {
+    currentUser = user;
+    showApp(user);
+    startFirestoreListener();
+  } else {
+    currentUser = null;
+    if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+    showAuthScreen();
+  }
+});
+
+function showApp(user) {
+  document.getElementById('auth-screen').classList.add('hide');
+  setTimeout(() => {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('app').classList.add('show');
+  }, 400);
+
+  // Update UI with user info
+  const name  = user.displayName || user.email.split('@')[0];
+  const email = user.email;
+  document.getElementById('userNameHeader').textContent = name;
+  document.getElementById('ud-name').textContent  = name;
+  document.getElementById('ud-email').textContent = email;
+
+  const av = document.getElementById('userAvatar');
+  if (user.photoURL) {
+    av.innerHTML = `<img src="${user.photoURL}" alt="">`;
+  } else {
+    av.textContent = name.charAt(0).toUpperCase();
+  }
+
+  loadFromStorage();
+  loadSettingsUI();
+  applyTheme();
+  renderAll();
+}
+
+function showAuthScreen() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('auth-screen').classList.remove('hide');
+  records = [];
+}
+
+// Auth tab switch
+window.switchTab = function(tab) {
+  document.getElementById('tab-login').classList.toggle('active',  tab==='login');
+  document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
+  document.getElementById('form-login').style.display  = tab==='login'  ? 'flex' : 'none';
+  document.getElementById('form-signup').style.display = tab==='signup' ? 'flex' : 'none';
+  clearAuthErrors();
+};
+
+function setAuthLoading(loading) {
+  ['btn-login','btn-signup','btn-google-login','btn-google-signup'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = loading;
+  });
+}
+
+function showAuthError(formId, msg) {
+  const el = document.getElementById(formId + '-error');
+  if (!el) return;
+  el.textContent = msg; el.classList.add('show');
+}
+function showAuthInfo(formId, msg) {
+  const el = document.getElementById(formId + '-info');
+  if (!el) return;
+  el.textContent = msg; el.classList.add('show');
+}
+function clearAuthErrors() {
+  document.querySelectorAll('.auth-error,.auth-info').forEach(el => el.classList.remove('show'));
+}
+
+window.doLogin = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  clearAuthErrors();
+  if (!email || !pass) { showAuthError('login','Vui lòng nhập email và mật khẩu'); return; }
+  setAuthLoading(true);
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    showAuthError('login', mapAuthError(e.code));
+  } finally {
+    setAuthLoading(false);
+  }
+};
+
+window.doSignup = async function() {
+  const email = document.getElementById('signup-email').value.trim();
+  const pass  = document.getElementById('signup-pass').value;
+  const pass2 = document.getElementById('signup-pass2').value;
+  clearAuthErrors();
+  if (!email || !pass) { showAuthError('signup','Vui lòng nhập đầy đủ thông tin'); return; }
+  if (pass !== pass2)  { showAuthError('signup','Mật khẩu xác nhận không khớp'); return; }
+  if (pass.length < 6) { showAuthError('signup','Mật khẩu tối thiểu 6 ký tự'); return; }
+  setAuthLoading(true);
+  try {
+    await createUserWithEmailAndPassword(auth, email, pass);
+    toast('Tạo tài khoản thành công! Đang đăng nhập...','success');
+  } catch(e) {
+    showAuthError('signup', mapAuthError(e.code));
+  } finally {
+    setAuthLoading(false);
+  }
+};
+
+window.doGoogleLogin = async function() {
+  clearAuthErrors();
+  setAuthLoading(true);
+  try {
+    await signInWithPopup(auth, gProvider);
+  } catch(e) {
+    if (e.code !== 'auth/popup-closed-by-user') {
+      showAuthError('login', mapAuthError(e.code));
+      showAuthError('signup', mapAuthError(e.code));
+    }
+  } finally {
+    setAuthLoading(false);
+  }
+};
+
+window.forgotPassword = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  clearAuthErrors();
+  if (!email) { showAuthError('login','Nhập email của bạn trước rồi nhấn Quên mật khẩu'); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showAuthInfo('login', `📧 Đã gửi email đặt lại mật khẩu tới ${email}`);
+  } catch(e) {
+    showAuthError('login', mapAuthError(e.code));
+  }
+};
+
+window.doLogout = async function() {
+  closeUserMenu();
+  if (!confirm('Bạn muốn đăng xuất?')) return;
+  try {
+    if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+    await signOut(auth);
+    records = [];
+    toast('Đã đăng xuất','info');
+  } catch(e) { toast('Lỗi đăng xuất: ' + e.message, 'error'); }
+};
+
+function mapAuthError(code) {
+  const map = {
+    'auth/user-not-found':      'Không tìm thấy tài khoản với email này',
+    'auth/wrong-password':      'Mật khẩu không đúng',
+    'auth/invalid-credential':  'Email hoặc mật khẩu không đúng',
+    'auth/email-already-in-use':'Email này đã được đăng ký',
+    'auth/weak-password':       'Mật khẩu quá yếu (tối thiểu 6 ký tự)',
+    'auth/invalid-email':       'Địa chỉ email không hợp lệ',
+    'auth/too-many-requests':   'Quá nhiều lần thử. Vui lòng thử lại sau',
+    'auth/network-request-failed':'Lỗi kết nối mạng',
+  };
+  return map[code] || 'Lỗi: ' + code;
+}
+
+// ══════════════════════════════════════
+// FIRESTORE SYNC
+// ══════════════════════════════════════
+function userCol(col) {
+  return collection(db, 'users', currentUser.uid, col);
+}
+function userDoc(col, id) {
+  return doc(db, 'users', currentUser.uid, col, id);
+}
+
+function setSyncStatus(status, text) {
+  const badge = document.getElementById('syncBadge');
+  const textEl = document.getElementById('syncText');
+  if (!badge) return;
+  badge.className = 'sync-badge ' + status;
+  textEl.textContent = text;
+}
+
+function startFirestoreListener() {
+  if (unsubscribe) unsubscribe();
+  setSyncStatus('syncing','Đang tải...');
+
+  const q = query(userCol('records'), orderBy('date', 'asc'));
+  unsubscribe = onSnapshot(q,
+    snapshot => {
+      records = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      saveToStorage();
+      renderAll();
+      setSyncStatus('synced','Đã đồng bộ');
+    },
+    err => {
+      console.error('Firestore listener error:', err);
+      setSyncStatus('error','Lỗi đồng bộ');
+      toast('Lỗi đồng bộ dữ liệu: ' + err.message, 'error');
+    }
+  );
+
+  // Load settings from Firestore
+  loadSettingsFromFirestore();
+}
+
+async function loadSettingsFromFirestore() {
+  try {
+    const snap = await getDoc(userDoc('meta', 'settings'));
+    if (snap.exists()) {
+      settings = { ...settings, ...snap.data() };
+      loadSettingsUI();
+      applyTheme();
+    }
+  } catch(e) { /* use local settings */ }
+}
+
+async function saveRecordToFirestore(record) {
+  if (!currentUser) return;
+  setSyncStatus('syncing','Đang lưu...');
+  try {
+    const { id, ...data } = record;
+    await setDoc(userDoc('records', id), { ...data, updatedAt: serverTimestamp() });
+    setSyncStatus('synced','Đã đồng bộ');
+  } catch(e) {
+    setSyncStatus('error','Lỗi lưu');
+    toast('Lỗi lưu Firebase: ' + e.message, 'error');
+    throw e;
+  }
+}
+
+async function deleteRecordFromFirestore(id) {
+  if (!currentUser) return;
+  setSyncStatus('syncing','Đang xóa...');
+  try {
+    await deleteDoc(userDoc('records', id));
+    setSyncStatus('synced','Đã đồng bộ');
+  } catch(e) {
+    setSyncStatus('error','Lỗi xóa');
+    toast('Lỗi xóa Firebase: ' + e.message, 'error');
+    throw e;
+  }
+}
+
+async function batchSaveRecords(recs) {
+  if (!currentUser || !recs.length) return;
+  setSyncStatus('syncing',`Đang nhập ${recs.length} bản ghi...`);
+  try {
+    // Firestore batch max 500 ops
+    const chunks = [];
+    for (let i = 0; i < recs.length; i += 400) chunks.push(recs.slice(i, i+400));
+    for (const chunk of chunks) {
+      const batch = writeBatch(db);
+      chunk.forEach(r => {
+        const { id, ...data } = r;
+        batch.set(userDoc('records', id), { ...data, updatedAt: serverTimestamp() });
+      });
+      await batch.commit();
+    }
+    setSyncStatus('synced','Đã đồng bộ');
+  } catch(e) {
+    setSyncStatus('error','Lỗi đồng bộ hàng loạt');
+    toast('Lỗi batch Firestore: ' + e.message,'error');
+    throw e;
+  }
+}
+
+async function batchDeleteRecords(ids) {
+  if (!currentUser || !ids.length) return;
+  const chunks = [];
+  for (let i = 0; i < ids.length; i += 400) chunks.push(ids.slice(i, i+400));
+  for (const chunk of chunks) {
+    const batch = writeBatch(db);
+    chunk.forEach(id => batch.delete(userDoc('records', id)));
+    await batch.commit();
+  }
+}
+
+async function saveSettingsToFirestore() {
+  if (!currentUser) return;
+  try {
+    await setDoc(userDoc('meta','settings'), { ...settings, updatedAt: serverTimestamp() });
+  } catch(e) { /* silent */ }
+}
+
+// ══════════════════════════════════════
+// LOCAL STORAGE (cache)
+// ══════════════════════════════════════
+function saveToStorage() {
+  try {
+    if (currentUser) {
+      localStorage.setItem('s1a_records_' + currentUser.uid, JSON.stringify(records));
+      localStorage.setItem('s1a_settings_' + currentUser.uid, JSON.stringify(settings));
+    }
+  } catch(e) {}
+}
+function loadFromStorage() {
+  try {
+    if (currentUser) {
+      const r = localStorage.getItem('s1a_records_' + currentUser.uid);
+      if (r) records = JSON.parse(r);
+      const s = localStorage.getItem('s1a_settings_' + currentUser.uid);
+      if (s) settings = { ...settings, ...JSON.parse(s) };
+    }
+  } catch(e) {}
+}
+function loadSettingsUI() {
+  document.getElementById('cfg-name').value    = settings.name    || '';
+  document.getElementById('cfg-address').value = settings.address || '';
+  document.getElementById('cfg-mst').value     = settings.mst     || '';
+  document.getElementById('cfg-ddk').value     = settings.ddk     || '';
+  document.getElementById('cfg-unit').value    = settings.unit    || 'Đồng';
+}
+window.saveSettings = async function() {
+  settings.name    = document.getElementById('cfg-name').value.trim();
+  settings.address = document.getElementById('cfg-address').value.trim();
+  settings.mst     = document.getElementById('cfg-mst').value.trim();
+  settings.ddk     = document.getElementById('cfg-ddk').value.trim();
+  settings.unit    = document.getElementById('cfg-unit').value.trim() || 'Đồng';
+  saveToStorage();
+  await saveSettingsToFirestore();
+  toast('Đã lưu cài đặt','success');
+};
+
+// ══════════════════════════════════════
+// THEME
+// ══════════════════════════════════════
+window.toggleTheme = function() {
+  settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(); saveToStorage();
+};
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', settings.theme);
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = settings.theme === 'dark' ? '☀️' : '🌙';
+  const t = document.getElementById('darkToggle');
+  if (t) t.classList.toggle('on', settings.theme === 'dark');
+}
+
+// ══════════════════════════════════════
+// USER DROPDOWN
+// ══════════════════════════════════════
+window.toggleUserMenu = function() {
+  document.getElementById('userDropdown').classList.toggle('open');
+};
+window.closeUserMenu = function() {
+  document.getElementById('userDropdown').classList.remove('open');
+};
+document.addEventListener('click', e => {
+  const btn = document.getElementById('userBtn');
+  const dd  = document.getElementById('userDropdown');
+  if (btn && dd && !btn.contains(e.target) && !dd.contains(e.target)) {
+    dd.classList.remove('open');
+  }
+});
+
+// ══════════════════════════════════════
+// SIDEBAR
+// ══════════════════════════════════════
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+};
+window.closeSidebar = function() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+};
+
+// ══════════════════════════════════════
+// PANELS
+// ══════════════════════════════════════
+window.showPanel = function(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  const nav = document.getElementById('nav-' + name);
+  if (nav) nav.classList.add('active');
+  closeSidebar();
+  if (name === 'records') renderRecords();
+  if (name === 'dashboard') renderDashboard();
+};
+
+// ══════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════
+function renderAll() { renderDashboard(); renderRecords(); }
+function fmt(n) { return Number(n||0).toLocaleString('vi-VN'); }
+
 function renderDashboard() {
-  const total = records.reduce((s,r)=>s+(r.amount||0),0);
-  const days = new Set(records.map(r=>r.date)).size;
-  const now = new Date();
-  const ym = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  const mTotal = records.filter(r=>r.date&&r.date.startsWith(ym)).reduce((s,r)=>s+(r.amount||0),0);
+  const total  = records.reduce((s,r) => s + (r.amount||0), 0);
+  const days   = new Set(records.map(r => r.date)).size;
+  const now    = new Date();
+  const ym     = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const mTotal = records.filter(r => r.date && r.date.startsWith(ym)).reduce((s,r) => s + (r.amount||0), 0);
   document.getElementById('stat-total').textContent = fmt(total);
-  document.getElementById('stat-days').textContent = days;
+  document.getElementById('stat-days').textContent  = days;
   document.getElementById('stat-month').textContent = fmt(mTotal);
   document.getElementById('stat-count').textContent = records.length;
+
   const tbody = document.getElementById('recent-tbody');
-  const recent = [...records].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);
-  if (!recent.length) { tbody.innerHTML=`<tr><td colspan="4"><div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Chưa có dữ liệu</div><div class="empty-sub">Nhập file hoặc thêm thủ công</div></div></td></tr>`; return; }
-  tbody.innerHTML = recent.map(r=>`<tr>
+  const recent = [...records].sort((a,b) => b.date.localeCompare(a.date)).slice(0,10);
+  if (!recent.length) {
+    tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Chưa có dữ liệu</div><div class="empty-sub">Nhập file hoặc thêm thủ công</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = recent.map(r => `<tr>
     <td class="td-date">${fmtDVN(r.date)}</td>
     <td class="td-items" title="${esc(r.items||'')}">${esc(r.items||'—')}</td>
     <td class="td-money">${fmt(r.amount)}</td>
@@ -686,40 +1262,41 @@ function renderDashboard() {
 
 function renderRecords(resetPage) {
   const fm = document.getElementById('filter-month').value;
-  const fs = (document.getElementById('filter-search').value||'').toLowerCase();
+  const fs = (document.getElementById('filter-search').value || '').toLowerCase();
   filteredData = [...records];
-  if(fm) filteredData=filteredData.filter(r=>r.date&&r.date.startsWith(fm));
-  if(fs) filteredData=filteredData.filter(r=>(r.date||'').includes(fs)||(r.items||'').toLowerCase().includes(fs)||String(r.amount).includes(fs));
-  filteredData.sort((a,b)=>a.date.localeCompare(b.date));
+  if (fm) filteredData = filteredData.filter(r => r.date && r.date.startsWith(fm));
+  if (fs) filteredData = filteredData.filter(r =>
+    (r.date||'').includes(fs) || (r.items||'').toLowerCase().includes(fs) || String(r.amount).includes(fs));
+  filteredData.sort((a,b) => a.date.localeCompare(b.date));
 
-  if(resetPage) currentPage=1;
+  if (resetPage) currentPage = 1;
   const totalPages = Math.max(1, Math.ceil(filteredData.length / PAGE_SIZE));
-  if(currentPage > totalPages) currentPage = totalPages;
+  if (currentPage > totalPages) currentPage = totalPages;
 
-  const grandTotal = filteredData.reduce((s,r)=>s+(r.amount||0),0);
-  document.getElementById('record-count-label').textContent=`${filteredData.length} bản ghi`;
+  const grandTotal = filteredData.reduce((s,r) => s + (r.amount||0), 0);
+  document.getElementById('record-count-label').textContent = `${filteredData.length} bản ghi`;
 
-  const tbody=document.getElementById('records-tbody');
-  if(!filteredData.length){
-    tbody.innerHTML=`<tr><td colspan="5"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">Không có dữ liệu</div></div></td></tr>`;
-    document.getElementById('pagination').innerHTML='';
+  const tbody = document.getElementById('records-tbody');
+  if (!filteredData.length) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">Không có dữ liệu</div></div></td></tr>`;
+    document.getElementById('pagination').innerHTML = '';
     return;
   }
 
-  const startIdx = (currentPage-1)*PAGE_SIZE;
-  const pageData = filteredData.slice(startIdx, startIdx+PAGE_SIZE);
+  const startIdx = (currentPage-1) * PAGE_SIZE;
+  const pageData = filteredData.slice(startIdx, startIdx + PAGE_SIZE);
 
-  let html='', lastMonth='';
-  pageData.forEach((r, i)=>{
+  let html = '', lastMonth = '';
+  pageData.forEach((r, i) => {
     const globalIdx = startIdx + i + 1;
-    const mo=(r.date||'').substring(0,7);
-    if(mo!==lastMonth){
-      const [y,m]=mo.split('-');
-      const mt=filteredData.filter(x=>x.date&&x.date.startsWith(mo)).reduce((s,x)=>s+(x.amount||0),0);
-      html+=`<tr class="month-header-row"><td colspan="5" style="padding:8px 12px">📅 Tháng ${m}/${y} — Tổng: <strong>${fmt(mt)}</strong> đ</td></tr>`;
-      lastMonth=mo;
+    const mo = (r.date||'').substring(0,7);
+    if (mo !== lastMonth) {
+      const [y,m] = mo.split('-');
+      const mt = filteredData.filter(x => x.date && x.date.startsWith(mo)).reduce((s,x) => s+(x.amount||0),0);
+      html += `<tr class="month-header-row"><td colspan="5" style="padding:8px 12px">📅 Tháng ${m}/${y} — Tổng: <strong>${fmt(mt)}</strong> đ</td></tr>`;
+      lastMonth = mo;
     }
-    html+=`<tr>
+    html += `<tr>
       <td style="color:var(--text3);font-size:12px">${globalIdx}</td>
       <td class="td-date">${fmtDVN(r.date)}</td>
       <td class="td-items" title="${esc(r.items||'')}">${esc(r.items||'—')}</td>
@@ -729,33 +1306,33 @@ function renderRecords(resetPage) {
         <button class="btn btn-ghost btn-sm btn-icon" onclick="deleteRecord('${r.id}')">🗑</button>
       </div></td></tr>`;
   });
-  html+=`<tr class="totals-row">
+  html += `<tr class="totals-row">
     <td colspan="3" style="text-align:right">
-      ${totalPages>1 ? `Trang ${currentPage}/${totalPages} (${pageData.length} dòng) &nbsp;·&nbsp; ` : ''}TỔNG CỘNG:
+      ${totalPages > 1 ? `Trang ${currentPage}/${totalPages} (${pageData.length} dòng) &nbsp;·&nbsp; ` : ''}TỔNG CỘNG:
     </td>
     <td class="td-money" style="font-size:14px">${fmt(grandTotal)}</td>
     <td></td>
   </tr>`;
-  tbody.innerHTML=html;
+  tbody.innerHTML = html;
   renderPagination(totalPages, filteredData.length);
 }
 
 function renderPagination(totalPages, totalRecords) {
   const pg = document.getElementById('pagination');
-  if(totalPages <= 1) { pg.innerHTML=''; return; }
-  const startR = (currentPage-1)*PAGE_SIZE+1;
-  const endR = Math.min(currentPage*PAGE_SIZE, totalRecords);
+  if (totalPages <= 1) { pg.innerHTML = ''; return; }
+  const startR = (currentPage-1)*PAGE_SIZE + 1;
+  const endR   = Math.min(currentPage*PAGE_SIZE, totalRecords);
   let pages = [];
-  if(totalPages <= 7) { for(let i=1;i<=totalPages;i++) pages.push(i); }
+  if (totalPages <= 7) { for (let i=1;i<=totalPages;i++) pages.push(i); }
   else {
     pages = [1];
-    if(currentPage > 3) pages.push('...');
-    for(let i=Math.max(2,currentPage-1); i<=Math.min(totalPages-1,currentPage+1); i++) pages.push(i);
-    if(currentPage < totalPages-2) pages.push('...');
+    if (currentPage > 3) pages.push('...');
+    for (let i=Math.max(2,currentPage-1); i<=Math.min(totalPages-1,currentPage+1); i++) pages.push(i);
+    if (currentPage < totalPages-2) pages.push('...');
     pages.push(totalPages);
   }
   const btnHtml = pages.map(p => {
-    if(p==='...') return `<span style="padding:0 4px;color:var(--text3)">…</span>`;
+    if (p==='...') return `<span style="padding:0 4px;color:var(--text3)">…</span>`;
     return `<button class="page-btn ${p===currentPage?'active':''}" onclick="goToPage(${p})">${p}</button>`;
   }).join('');
   pg.innerHTML = `
@@ -769,200 +1346,245 @@ function renderPagination(totalPages, totalRecords) {
   `;
 }
 
-function goToPage(p) {
+window.goToPage = function(p) {
   const totalPages = Math.max(1, Math.ceil(filteredData.length/PAGE_SIZE));
   p = Math.max(1, Math.min(totalPages, Math.round(p)));
-  if(p === currentPage) return;
+  if (p === currentPage) return;
   currentPage = p;
   renderRecords();
-  document.getElementById('records-tbody').closest('.card').scrollIntoView({behavior:'smooth', block:'start'});
-}
+  document.getElementById('records-tbody').closest('.card').scrollIntoView({behavior:'smooth',block:'start'});
+};
 
-function clearFilters(){
-  document.getElementById('filter-month').value='';
-  document.getElementById('filter-search').value='';
-  currentPage=1; renderRecords();
-}
+window.clearFilters = function() {
+  document.getElementById('filter-month').value = '';
+  document.getElementById('filter-search').value = '';
+  currentPage = 1; renderRecords();
+};
 
-// ═══ ADD/EDIT ═══
-function openAddModal(id) {
-  editingId=id||null;
-  document.getElementById('modal-add-title').textContent=id?'Chỉnh sửa bản ghi':'Thêm bản ghi mới';
-  if(id){const r=records.find(x=>x.id===id);if(r){document.getElementById('f-date').value=r.date;document.getElementById('f-amount').value=r.amount;document.getElementById('f-items').value=r.items||'';}}
-  else{document.getElementById('f-date').value=new Date().toISOString().split('T')[0];document.getElementById('f-amount').value='';document.getElementById('f-items').value='';}
-  document.getElementById('modal-add').classList.add('show');
-}
-function closeAddModal(){document.getElementById('modal-add').classList.remove('show');editingId=null;}
-
-function saveRecord() {
-  const date=document.getElementById('f-date').value;
-  const amount=parseFloat(document.getElementById('f-amount').value);
-  const items=document.getElementById('f-items').value.trim();
-  if(!date){toast('Vui lòng nhập ngày bán','error');return;}
-  if(isNaN(amount)||amount<0){toast('Vui lòng nhập doanh thu hợp lệ','error');return;}
-  if(editingId){
-    const idx=records.findIndex(r=>r.id===editingId);
-    if(idx!==-1) records[idx]={...records[idx],date,amount,items};
-    toast('Đã cập nhật bản ghi','success');
-  } else {
-    const dup=records.find(r=>r.date===date);
-    if(dup){
-      if(!confirm(`⚠️ Ngày ${fmtDVN(date)} đã có trong sổ\nDoanh thu cũ: ${fmt(dup.amount)} đ\n\nBạn có muốn GHI ĐÈ không?`)) return;
-      records=records.filter(r=>r.date!==date);
+// ══════════════════════════════════════
+// ADD / EDIT RECORD
+// ══════════════════════════════════════
+window.openAddModal = function(id) {
+  editingId = id || null;
+  document.getElementById('modal-add-title').textContent = id ? 'Chỉnh sửa bản ghi' : 'Thêm bản ghi mới';
+  if (id) {
+    const r = records.find(x => x.id === id);
+    if (r) {
+      document.getElementById('f-date').value   = r.date;
+      document.getElementById('f-amount').value = r.amount;
+      document.getElementById('f-items').value  = r.items || '';
     }
-    records.push({id:uid(),date,amount,items});
-    toast('Đã thêm bản ghi mới','success');
+  } else {
+    document.getElementById('f-date').value   = new Date().toISOString().split('T')[0];
+    document.getElementById('f-amount').value = '';
+    document.getElementById('f-items').value  = '';
   }
-  saveToStorage(); renderAll(); closeAddModal();
-}
-function deleteRecord(id){
-  const r=records.find(x=>x.id===id);if(!r)return;
-  if(!confirm(`Xóa bản ghi ngày ${fmtDVN(r.date)} (${fmt(r.amount)} đ)?`))return;
-  records=records.filter(x=>x.id!==id);saveToStorage();renderAll();toast('Đã xóa bản ghi','info');
-}
+  document.getElementById('modal-add').classList.add('show');
+};
+window.closeAddModal = function() {
+  document.getElementById('modal-add').classList.remove('show');
+  editingId = null;
+};
 
-// ═══ FILE QUEUE ═══
-function handleFileDrop(e){
-  e.preventDefault();document.getElementById('upload-zone').classList.remove('drag');
-  addFilesToQueue(Array.from(e.dataTransfer.files).filter(f=>/\.(xlsx|xls)$/i.test(f.name)));
-}
-function handleFileInput(e){addFilesToQueue(Array.from(e.target.files));e.target.value='';}
+window.saveRecord = async function() {
+  const date   = document.getElementById('f-date').value;
+  const amount = parseFloat(document.getElementById('f-amount').value);
+  const items  = document.getElementById('f-items').value.trim();
+  if (!date)               { toast('Vui lòng nhập ngày bán','error'); return; }
+  if (isNaN(amount)||amount<0) { toast('Vui lòng nhập doanh thu hợp lệ','error'); return; }
 
-function addFilesToQueue(files){
-  if(!files.length)return;
-  let added=0;
-  files.forEach(file=>{
-    if(!fileQueue.find(f=>f.name===file.name)){fileQueue.push({file,name:file.name,status:'pending',parsed:[]});added++;}
+  try {
+    if (editingId) {
+      const record = { id: editingId, date, amount, items };
+      await saveRecordToFirestore(record);
+      toast('Đã cập nhật bản ghi','success');
+    } else {
+      const dup = records.find(r => r.date === date);
+      if (dup) {
+        if (!confirm(`⚠️ Ngày ${fmtDVN(date)} đã có trong sổ\nDoanh thu cũ: ${fmt(dup.amount)} đ\n\nBạn có muốn GHI ĐÈ không?`)) return;
+        await deleteRecordFromFirestore(dup.id);
+      }
+      const record = { id: uid(), date, amount, items };
+      await saveRecordToFirestore(record);
+      toast('Đã thêm bản ghi mới','success');
+    }
+    closeAddModal();
+  } catch(e) { /* error shown in saveRecordToFirestore */ }
+};
+
+window.deleteRecord = async function(id) {
+  const r = records.find(x => x.id === id);
+  if (!r) return;
+  if (!confirm(`Xóa bản ghi ngày ${fmtDVN(r.date)} (${fmt(r.amount)} đ)?`)) return;
+  try {
+    await deleteRecordFromFirestore(id);
+    toast('Đã xóa bản ghi','info');
+  } catch(e) {}
+};
+
+// ══════════════════════════════════════
+// FILE QUEUE
+// ══════════════════════════════════════
+window.handleFileDrop = function(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag');
+  addFilesToQueue(Array.from(e.dataTransfer.files).filter(f => /\.(xlsx|xls)$/i.test(f.name)));
+};
+window.handleFileInput = function(e) { addFilesToQueue(Array.from(e.target.files)); e.target.value = ''; };
+
+function addFilesToQueue(files) {
+  if (!files.length) return;
+  let added = 0;
+  files.forEach(file => {
+    if (!fileQueue.find(f => f.name === file.name)) { fileQueue.push({file, name:file.name, status:'pending', parsed:[]}); added++; }
   });
-  if(added>0) toast(`Đã thêm ${added} file vào hàng đợi`,'info');
-  renderFileQueue();parseAllFiles();
+  if (added > 0) toast(`Đã thêm ${added} file vào hàng đợi`,'info');
+  renderFileQueue(); parseAllFiles();
 }
-function clearQueue(){fileQueue=[];pendingImport=[];dupAction='ask';dupChoices={};renderFileQueue();document.getElementById('import-preview').style.display='none';}
-function removeFromQueue(name){fileQueue=fileQueue.filter(f=>f.name!==name);if(!fileQueue.length){clearQueue();return;}renderFileQueue();rebuildPreview();}
+window.clearQueue = function() {
+  fileQueue = []; pendingImport = []; dupAction = 'ask'; dupChoices = {};
+  renderFileQueue();
+  document.getElementById('import-preview').style.display = 'none';
+};
+window.removeFromQueue = function(name) {
+  fileQueue = fileQueue.filter(f => f.name !== name);
+  if (!fileQueue.length) { clearQueue(); return; }
+  renderFileQueue(); rebuildPreview();
+};
 
-function renderFileQueue(){
-  const wrap=document.getElementById('file-queue-wrap');
-  const list=document.getElementById('file-list');
-  if(!fileQueue.length){wrap.style.display='none';return;}
-  wrap.style.display='block';
-  const ok=fileQueue.filter(f=>f.status==='ok').length;
-  const err=fileQueue.filter(f=>f.status==='error').length;
-  document.getElementById('queue-badge').textContent=`${fileQueue.length} file`;
-  const okB=document.getElementById('queue-ok-badge');
-  const errB=document.getElementById('queue-err-badge');
-  if(ok>0){okB.style.display='inline-flex';okB.textContent=`✓ ${ok} thành công`;}else okB.style.display='none';
-  if(err>0){errB.style.display='inline-flex';errB.textContent=`✗ ${err} lỗi`;}else errB.style.display='none';
-  list.innerHTML=fileQueue.map(f=>{
-    const st=f.status==='ok'?`<span class="fi-ok">✓ ${f.parsed.length} ngày</span>`:f.status==='error'?`<span class="fi-err">✗ Lỗi đọc file</span>`:`<span class="fi-loading">⏳ Đang xử lý...</span>`;
+function renderFileQueue() {
+  const wrap = document.getElementById('file-queue-wrap');
+  const list = document.getElementById('file-list');
+  if (!fileQueue.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  const ok  = fileQueue.filter(f => f.status === 'ok').length;
+  const err = fileQueue.filter(f => f.status === 'error').length;
+  document.getElementById('queue-badge').textContent = `${fileQueue.length} file`;
+  const okB = document.getElementById('queue-ok-badge');
+  const errB = document.getElementById('queue-err-badge');
+  if (ok > 0)  { okB.style.display='inline-flex';  okB.textContent=`✓ ${ok} thành công`; } else okB.style.display='none';
+  if (err > 0) { errB.style.display='inline-flex'; errB.textContent=`✗ ${err} lỗi`; }      else errB.style.display='none';
+  list.innerHTML = fileQueue.map(f => {
+    const st = f.status==='ok' ? `<span class="fi-ok">✓ ${f.parsed.length} ngày</span>`
+             : f.status==='error' ? `<span class="fi-err">✗ Lỗi đọc file</span>`
+             : `<span class="fi-loading">⏳ Đang xử lý...</span>`;
     return `<div class="file-item"><span style="font-size:17px">📄</span><span class="file-item-name" title="${esc(f.name)}">${esc(f.name)}</span>${st}<button class="file-item-remove" onclick="removeFromQueue('${esc(f.name).replace(/'/g,"\\'")}')">✕</button></div>`;
   }).join('');
 }
 
-async function parseAllFiles(){
-  const pending=fileQueue.filter(f=>f.status==='pending');if(!pending.length)return;
-  const prog=document.getElementById('parse-progress');
-  const pt=document.getElementById('parse-progress-text');
-  const pf=document.getElementById('parse-progress-fill');
-  prog.style.display='block';
-  for(let i=0;i<pending.length;i++){
-    const qf=pending[i];qf.status='loading';renderFileQueue();
-    pt.textContent=`Đang đọc: ${qf.name} (${i+1}/${pending.length})`;
-    pf.style.width=`${Math.round((i/pending.length)*100)}%`;
-    try{const p=await readFileAsync(qf.file);qf.parsed=p;qf.status=p.length>0?'ok':'error';}
-    catch(e){qf.status='error';qf.parsed=[];}
+async function parseAllFiles() {
+  const pending = fileQueue.filter(f => f.status === 'pending');
+  if (!pending.length) return;
+  const prog = document.getElementById('parse-progress');
+  const pt   = document.getElementById('parse-progress-text');
+  const pf   = document.getElementById('parse-progress-fill');
+  prog.style.display = 'block';
+  for (let i=0; i<pending.length; i++) {
+    const qf = pending[i]; qf.status = 'loading'; renderFileQueue();
+    pt.textContent = `Đang đọc: ${qf.name} (${i+1}/${pending.length})`;
+    pf.style.width = `${Math.round((i/pending.length)*100)}%`;
+    try { const p = await readFileAsync(qf.file); qf.parsed = p; qf.status = p.length > 0 ? 'ok' : 'error'; }
+    catch(e) { qf.status = 'error'; qf.parsed = []; }
     renderFileQueue();
   }
-  pf.style.width='100%';pt.textContent=`Hoàn tất! ${fileQueue.filter(f=>f.status==='ok').length}/${fileQueue.length} file đọc thành công.`;
-  setTimeout(()=>{prog.style.display='none';},1500);
+  pf.style.width = '100%';
+  pt.textContent = `Hoàn tất! ${fileQueue.filter(f=>f.status==='ok').length}/${fileQueue.length} file đọc thành công.`;
+  setTimeout(() => { prog.style.display = 'none'; }, 1500);
   rebuildPreview();
 }
 
-function readFileAsync(file){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onload=e=>{
-      try{
-        const wb=XLSX.read(e.target.result,{type:'binary',cellDates:true});
-        const ws=wb.Sheets[wb.SheetNames[0]];
-        const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-        resolve(parseRows(rows,file.name));
-      }catch(err){reject(err);}
+function readFileAsync(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const wb   = XLSX.read(e.target.result, {type:'binary', cellDates:true});
+        const ws   = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+        resolve(parseRows(rows, file.name));
+      } catch(err) { reject(err); }
     };
-    reader.onerror=reject;reader.readAsBinaryString(file);
+    reader.onerror = reject;
+    reader.readAsBinaryString(file);
   });
 }
 
-function parseRows(rows,fileName){
-  let hRow=-1,cDate=-1,cItems=-1,cAmt=-1;
-  for(let i=0;i<rows.length;i++){
-    const row=rows[i].map(c=>String(c||'').trim().toLowerCase());
-    const dI=row.findIndex(c=>(c.includes('ngày')&&(c.includes('bc')||c.includes('bán')||c.includes('tháng')))||c==='ngày');
-    const hI=row.findIndex(c=>c.includes('mặt hàng')||c.includes('tên hàng')||c.includes('hàng hóa')||c.includes('tên thuốc'));
-    const rI=row.findIndex(c=>c==='doanh thu'||c.includes('doanh thu')||c==='tổng tiền bán'||c.includes('số tiền'));
-    if(dI>=0&&rI>=0){hRow=i;cDate=dI;cItems=hI>=0?hI:-1;cAmt=rI;break;}
+function parseRows(rows, fileName) {
+  let hRow=-1, cDate=-1, cItems=-1, cAmt=-1;
+  for (let i=0; i<rows.length; i++) {
+    const row = rows[i].map(c => String(c||'').trim().toLowerCase());
+    const dI = row.findIndex(c => (c.includes('ngày')&&(c.includes('bc')||c.includes('bán')||c.includes('tháng')))||c==='ngày');
+    const hI = row.findIndex(c => c.includes('mặt hàng')||c.includes('tên hàng')||c.includes('hàng hóa')||c.includes('tên thuốc'));
+    const rI = row.findIndex(c => c==='doanh thu'||c.includes('doanh thu')||c==='tổng tiền bán'||c.includes('số tiền'));
+    if (dI >= 0 && rI >= 0) { hRow=i; cDate=dI; cItems=hI>=0?hI:-1; cAmt=rI; break; }
   }
-  if(hRow<0) return [];
-  const grouped={};
-  for(let i=hRow+1;i<rows.length;i++){
-    const row=rows[i];
-    const rawD=row[cDate],rawA=row[cAmt],rawI=cItems>=0?row[cItems]:'';
-    if(!rawD||!rawA) continue;
-    const ds=String(rawD||'').trim().toLowerCase();
-    if(!ds||ds.startsWith('tổng')||ds==='a') continue;
-    const pd=parseDate(rawD);if(!pd) continue;
-    const amt=parseFloat(String(rawA).replace(/[^0-9.-]/g,''))||0;if(amt<=0) continue;
-    const item=String(rawI||'').trim();
-    if(!grouped[pd]) grouped[pd]={amount:0,items:[],file:fileName};
-    grouped[pd].amount+=amt;
-    if(item&&!grouped[pd].items.includes(item)) grouped[pd].items.push(item);
+  if (hRow < 0) return [];
+  const grouped = {};
+  for (let i=hRow+1; i<rows.length; i++) {
+    const row = rows[i];
+    const rawD = row[cDate], rawA = row[cAmt], rawI = cItems >= 0 ? row[cItems] : '';
+    if (!rawD || !rawA) continue;
+    const ds = String(rawD||'').trim().toLowerCase();
+    if (!ds || ds.startsWith('tổng') || ds==='a') continue;
+    const pd = parseDate(rawD); if (!pd) continue;
+    const amt = parseFloat(String(rawA).replace(/[^0-9.-]/g,'')) || 0; if (amt <= 0) continue;
+    const item = String(rawI||'').trim();
+    if (!grouped[pd]) grouped[pd] = {amount:0, items:[], file:fileName};
+    grouped[pd].amount += amt;
+    if (item && !grouped[pd].items.includes(item)) grouped[pd].items.push(item);
   }
-  return Object.entries(grouped).map(([date,v])=>({id:uid(),date,amount:Math.round(v.amount),items:v.items.join(', '),sourceFile:fileName}));
+  return Object.entries(grouped).map(([date,v]) => ({
+    id: uid(), date, amount: Math.round(v.amount), items: v.items.join(', '), sourceFile: fileName
+  }));
 }
 
-// ═══ PREVIEW & DUPLICATE ═══
-function rebuildPreview(){
-  const merged={};
-  fileQueue.filter(f=>f.status==='ok').forEach(f=>{
-    f.parsed.forEach(r=>{
-      if(!merged[r.date]){merged[r.date]={...r,sourceFiles:[r.sourceFile]};}
-      else{
-        merged[r.date].amount+=r.amount;
-        const eI=merged[r.date].items?merged[r.date].items.split(', '):[];
-        const nI=r.items?r.items.split(', ').filter(x=>x&&!eI.includes(x)):[];
-        merged[r.date].items=[...eI,...nI].filter(Boolean).join(', ');
-        if(!merged[r.date].sourceFiles.includes(r.sourceFile)) merged[r.date].sourceFiles.push(r.sourceFile);
+// ══════════════════════════════════════
+// PREVIEW & DUPLICATES
+// ══════════════════════════════════════
+function rebuildPreview() {
+  const merged = {};
+  fileQueue.filter(f => f.status === 'ok').forEach(f => {
+    f.parsed.forEach(r => {
+      if (!merged[r.date]) { merged[r.date] = {...r, sourceFiles:[r.sourceFile]}; }
+      else {
+        merged[r.date].amount += r.amount;
+        const eI = merged[r.date].items ? merged[r.date].items.split(', ') : [];
+        const nI = r.items ? r.items.split(', ').filter(x => x && !eI.includes(x)) : [];
+        merged[r.date].items = [...eI,...nI].filter(Boolean).join(', ');
+        if (!merged[r.date].sourceFiles.includes(r.sourceFile)) merged[r.date].sourceFiles.push(r.sourceFile);
       }
     });
   });
-  pendingImport=Object.values(merged).sort((a,b)=>a.date.localeCompare(b.date));
-  if(!pendingImport.length){document.getElementById('import-preview').style.display='none';return;}
-  const existSet=new Set(records.map(r=>r.date));
-  const dups=pendingImport.filter(r=>existSet.has(r.date));
-  dupAction='ask';dupChoices={};
-  dups.forEach(r=>{dupChoices[r.date]='ask';});
-  renderPreviewTable(existSet,dups);
+  pendingImport = Object.values(merged).sort((a,b) => a.date.localeCompare(b.date));
+  if (!pendingImport.length) { document.getElementById('import-preview').style.display='none'; return; }
+  const existSet = new Set(records.map(r => r.date));
+  const dups = pendingImport.filter(r => existSet.has(r.date));
+  dupAction = 'ask'; dupChoices = {};
+  dups.forEach(r => { dupChoices[r.date] = 'ask'; });
+  renderPreviewTable(existSet, dups);
 }
 
-function renderPreviewTable(existSet,dups){
-  existSet=existSet||new Set(records.map(r=>r.date));
-  dups=dups||pendingImport.filter(r=>existSet.has(r.date));
-  const newCnt=pendingImport.filter(r=>!existSet.has(r.date)).length;
-  document.getElementById('preview-new-badge').textContent=`${newCnt} ngày mới`;
-  const db=document.getElementById('preview-dup-badge');
-  const dw=document.getElementById('dup-warning');
-  if(dups.length){
-    db.style.display='inline-flex';db.textContent=`${dups.length} ngày trùng`;
-    dw.style.display='block';
-    document.getElementById('dup-summary-text').innerHTML=
+function renderPreviewTable(existSet, dups) {
+  existSet = existSet || new Set(records.map(r => r.date));
+  dups = dups || pendingImport.filter(r => existSet.has(r.date));
+  const newCnt = pendingImport.filter(r => !existSet.has(r.date)).length;
+  document.getElementById('preview-new-badge').textContent = `${newCnt} ngày mới`;
+  const db2 = document.getElementById('preview-dup-badge');
+  const dw  = document.getElementById('dup-warning');
+  if (dups.length) {
+    db2.style.display = 'inline-flex'; db2.textContent = `${dups.length} ngày trùng`;
+    dw.style.display = 'block';
+    document.getElementById('dup-summary-text').innerHTML =
       `Có <strong>${dups.length} ngày</strong> đã tồn tại trong sổ:<br>` +
-      dups.map(r=>`<span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:var(--danger-soft);color:var(--danger);border-radius:4px;font-size:12px;font-weight:600">${fmtDVN(r.date)}</span>`).join('');
-  } else {db.style.display='none';dw.style.display='none';}
-  const tbody=document.getElementById('preview-tbody');
-  tbody.innerHTML=pendingImport.map(r=>{
-    const isDup=existSet.has(r.date);
-    const st=isDup?`<span class="badge badge-red">⚠️ Trùng</span>`:`<span class="badge badge-green">✓ Mới</span>`;
-    const rs=isDup?'background:var(--warning-soft)':'';
-    const sf=(r.sourceFiles||[r.sourceFile]).join(', ');
+      dups.map(r => `<span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:var(--danger-soft);color:var(--danger);border-radius:4px;font-size:12px;font-weight:600">${fmtDVN(r.date)}</span>`).join('');
+  } else { db2.style.display='none'; dw.style.display='none'; }
+
+  const tbody = document.getElementById('preview-tbody');
+  tbody.innerHTML = pendingImport.map(r => {
+    const isDup = existSet.has(r.date);
+    const st = isDup ? `<span class="badge badge-red">⚠️ Trùng</span>` : `<span class="badge badge-green">✓ Mới</span>`;
+    const rs = isDup ? 'background:var(--warning-soft)' : '';
+    const sf = (r.sourceFiles || [r.sourceFile]).join(', ');
     return `<tr style="${rs}">
       <td class="td-date"><strong>${fmtDVN(r.date)}</strong></td>
       <td style="font-size:11px;color:var(--text3);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(sf)}">${esc(sf)}</td>
@@ -971,41 +1593,41 @@ function renderPreviewTable(existSet,dups){
       <td>${st}</td></tr>`;
   }).join('');
   renderDupChip();
-  document.getElementById('import-preview').style.display='block';
+  document.getElementById('import-preview').style.display = 'block';
 }
 
-function setDupAction(action){
-  dupAction=action;Object.keys(dupChoices).forEach(d=>{dupChoices[d]=action;});
+window.setDupAction = function(action) {
+  dupAction = action;
+  Object.keys(dupChoices).forEach(d => { dupChoices[d] = action; });
   renderDupChip();
   toast(action==='overwrite'?'🔄 Sẽ ghi đè tất cả ngày trùng':'⏭ Sẽ bỏ qua tất cả ngày trùng','info');
-}
+};
 
-function renderDupChip(){
-  const chip=document.getElementById('dup-action-chip');
-  const dups=pendingImport.filter(r=>new Set(records.map(x=>x.date)).has(r.date));
-  if(!dups.length){chip.innerHTML='';return;}
-  const undecided=dups.filter(r=>!dupChoices[r.date]||dupChoices[r.date]==='ask').length;
-  if(undecided>0){
-    chip.innerHTML=`<span class="chip" style="background:var(--danger-soft);border:1px solid var(--danger);color:var(--danger)">⚠️ Còn ${undecided} ngày chưa quyết định</span>`;
-  } else if(dupAction==='overwrite'||Object.values(dupChoices).every(v=>v==='overwrite')){
-    chip.innerHTML=`<span class="chip" style="background:var(--warning-soft);border:1px solid var(--warning);color:var(--warning)">🔄 Ghi đè ${dups.length} ngày trùng</span>`;
-  } else if(dupAction==='skip'||Object.values(dupChoices).every(v=>v==='skip')){
-    chip.innerHTML=`<span class="chip" style="background:var(--surface2);border:1px solid var(--border)">⏭ Bỏ qua ${dups.length} ngày trùng</span>`;
+function renderDupChip() {
+  const chip = document.getElementById('dup-action-chip');
+  const dups = pendingImport.filter(r => new Set(records.map(x => x.date)).has(r.date));
+  if (!dups.length) { chip.innerHTML=''; return; }
+  const undecided = dups.filter(r => !dupChoices[r.date] || dupChoices[r.date]==='ask').length;
+  if (undecided > 0) {
+    chip.innerHTML = `<span class="chip" style="background:var(--danger-soft);border:1px solid var(--danger);color:var(--danger)">⚠️ Còn ${undecided} ngày chưa quyết định</span>`;
+  } else if (Object.values(dupChoices).every(v => v==='overwrite')) {
+    chip.innerHTML = `<span class="chip" style="background:var(--warning-soft);border:1px solid var(--warning);color:var(--warning)">🔄 Ghi đè ${dups.length} ngày trùng</span>`;
+  } else if (Object.values(dupChoices).every(v => v==='skip')) {
+    chip.innerHTML = `<span class="chip" style="background:var(--surface2);border:1px solid var(--border)">⏭ Bỏ qua ${dups.length} ngày trùng</span>`;
   } else {
-    const owCnt=Object.values(dupChoices).filter(v=>v==='overwrite').length;
-    const skCnt=Object.values(dupChoices).filter(v=>v==='skip').length;
-    chip.innerHTML=`<span class="chip" style="background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent)">✓ Ghi đè ${owCnt} · Bỏ qua ${skCnt}</span>`;
+    const owCnt = Object.values(dupChoices).filter(v => v==='overwrite').length;
+    const skCnt = Object.values(dupChoices).filter(v => v==='skip').length;
+    chip.innerHTML = `<span class="chip" style="background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent)">✓ Ghi đè ${owCnt} · Bỏ qua ${skCnt}</span>`;
   }
 }
 
-function showDupDetail(){
-  const existSet=new Set(records.map(r=>r.date));
-  const dups=pendingImport.filter(r=>existSet.has(r.date));if(!dups.length)return;
-  const tbody=document.getElementById('dup-detail-tbody');
-  tbody.innerHTML=dups.map(r=>{
-    const old=records.find(x=>x.date===r.date);
-    const ch=dupChoices[r.date]||'ask';
-    const dateKey=r.date.replace(/-/g,'_');
+window.showDupDetail = function() {
+  const existSet = new Set(records.map(r => r.date));
+  const dups = pendingImport.filter(r => existSet.has(r.date)); if (!dups.length) return;
+  const tbody = document.getElementById('dup-detail-tbody');
+  tbody.innerHTML = dups.map(r => {
+    const old = records.find(x => x.date === r.date);
+    const dateKey = r.date.replace(/-/g,'_');
     return `<tr id="duprow-${dateKey}">
       <td class="td-date" style="vertical-align:top;padding-top:13px"><strong>${fmtDVN(r.date)}</strong></td>
       <td style="font-size:12px;max-width:180px;vertical-align:top">
@@ -1023,80 +1645,98 @@ function showDupDetail(){
         </div>
       </td></tr>`;
   }).join('');
-  dups.forEach(r=>{ const ch=dupChoices[r.date]||'ask'; if(ch!=='ask') _applyDupBtnStyle(r.date,ch); });
-  document.getElementById('dup-undecided-warn').style.display='none';
+  dups.forEach(r => { const ch=dupChoices[r.date]||'ask'; if(ch!=='ask') _applyDupBtnStyle(r.date,ch); });
+  document.getElementById('dup-undecided-warn').style.display = 'none';
   document.getElementById('modal-dup').classList.add('show');
-}
-function closeDupModal(){document.getElementById('modal-dup').classList.remove('show');}
+};
+window.closeDupModal = function() { document.getElementById('modal-dup').classList.remove('show'); };
 
-function _applyDupBtnStyle(date,action){
-  const key=date.replace(/-/g,'_');
-  const ow=document.getElementById('btn-ow-'+key);
-  const sk=document.getElementById('btn-sk-'+key);
-  if(ow) ow.className=`btn btn-sm ${action==='overwrite'?'btn-warning':'btn-ghost'}`;
-  if(sk) sk.className=`btn btn-sm ${action==='skip'?'btn-primary':'btn-ghost'}`;
+function _applyDupBtnStyle(date, action) {
+  const key = date.replace(/-/g,'_');
+  const ow = document.getElementById('btn-ow-'+key);
+  const sk = document.getElementById('btn-sk-'+key);
+  if (ow) ow.className = `btn btn-sm ${action==='overwrite'?'btn-warning':'btn-ghost'}`;
+  if (sk) sk.className = `btn btn-sm ${action==='skip'?'btn-primary':'btn-ghost'}`;
 }
-function setDupRow(date,action){dupChoices[date]=action;_applyDupBtnStyle(date,action);}
-function setAllDupRows(action){Object.keys(dupChoices).forEach(d=>{setDupRow(d,action);});}
+window.setDupRow = function(date, action) { dupChoices[date]=action; _applyDupBtnStyle(date,action); };
+window.setAllDupRows = function(action) { Object.keys(dupChoices).forEach(d => setDupRow(d,action)); };
 
-function applyDupChoices(){
-  const undecided=Object.entries(dupChoices).filter(([,v])=>v==='ask'||!v);
-  const warn=document.getElementById('dup-undecided-warn');
-  if(undecided.length){warn.style.display='block';warn.textContent=`⚠️ Còn ${undecided.length} ngày chưa chọn hành động`;return;}
-  warn.style.display='none';
-  const actions=new Set(Object.values(dupChoices));
-  dupAction=actions.size===1?[...actions][0]:'mixed';
-  closeDupModal();renderDupChip();
-  const owCnt=Object.values(dupChoices).filter(v=>v==='overwrite').length;
-  const skCnt=Object.values(dupChoices).filter(v=>v==='skip').length;
+window.applyDupChoices = function() {
+  const undecided = Object.entries(dupChoices).filter(([,v]) => v==='ask'||!v);
+  const warn = document.getElementById('dup-undecided-warn');
+  if (undecided.length) { warn.style.display='block'; warn.textContent=`⚠️ Còn ${undecided.length} ngày chưa chọn hành động`; return; }
+  warn.style.display = 'none';
+  const actions = new Set(Object.values(dupChoices));
+  dupAction = actions.size===1 ? [...actions][0] : 'mixed';
+  closeDupModal(); renderDupChip();
+  const owCnt = Object.values(dupChoices).filter(v=>v==='overwrite').length;
+  const skCnt = Object.values(dupChoices).filter(v=>v==='skip').length;
   toast(`Đã chọn: Ghi đè ${owCnt} ngày · Bỏ qua ${skCnt} ngày`,'success');
-}
+};
 
-// ═══ CONFIRM IMPORT ═══
-function confirmImport(){
-  if(!pendingImport.length) return;
-  const existSet=new Set(records.map(r=>r.date));
-  const dups=pendingImport.filter(r=>existSet.has(r.date));
-  if(dups.length){
-    const undecided=dups.filter(r=>!dupChoices[r.date]||dupChoices[r.date]==='ask');
-    if(undecided.length){
+// ══════════════════════════════════════
+// CONFIRM IMPORT → Firestore
+// ══════════════════════════════════════
+window.confirmImport = async function() {
+  if (!pendingImport.length) return;
+  const existSet = new Set(records.map(r => r.date));
+  const dups = pendingImport.filter(r => existSet.has(r.date));
+  if (dups.length) {
+    const undecided = dups.filter(r => !dupChoices[r.date] || dupChoices[r.date]==='ask');
+    if (undecided.length) {
       toast(`⚠️ Còn ${undecided.length} ngày trùng chưa quyết định!`,'warning');
       document.getElementById('dup-warning').scrollIntoView({behavior:'smooth',block:'center'});
       return;
     }
   }
-  let added=0,overwritten=0,skipped=0;
-  pendingImport.forEach(r=>{
-    if(existSet.has(r.date)){
-      const ch=dupChoices[r.date]||'skip';
-      if(ch==='overwrite'){records=records.filter(x=>x.date!==r.date);records.push({...r,id:uid()});overwritten++;}
-      else skipped++;
-    } else {records.push({...r,id:uid()});added++;}
+
+  const toAdd      = [];
+  const toOverwrite = [];
+  const idsToDelete = [];
+  let skipped = 0;
+
+  pendingImport.forEach(r => {
+    if (existSet.has(r.date)) {
+      const ch = dupChoices[r.date] || 'skip';
+      if (ch === 'overwrite') {
+        const old = records.find(x => x.date === r.date);
+        if (old) idsToDelete.push(old.id);
+        toOverwrite.push({...r, id: uid()});
+      } else { skipped++; }
+    } else { toAdd.push({...r, id: uid()}); }
   });
-  saveToStorage();renderAll();cancelImport();
-  const parts=[];
-  if(added) parts.push(`Nhập mới ${added} ngày`);
-  if(overwritten) parts.push(`Ghi đè ${overwritten} ngày`);
-  if(skipped) parts.push(`Bỏ qua ${skipped} ngày trùng`);
-  toast('✅ '+parts.join(' · '),'success');
-  currentPage=1; showPanel('records');
-}
 
-function cancelImport(){
-  pendingImport=[];dupAction='ask';dupChoices={};
-  document.getElementById('import-preview').style.display='none';
-  document.getElementById('preview-tbody').innerHTML='';
-}
+  try {
+    if (idsToDelete.length) await batchDeleteRecords(idsToDelete);
+    if ([...toAdd,...toOverwrite].length) await batchSaveRecords([...toAdd,...toOverwrite]);
 
-// ═══ EXPORT EXCEL ═══
-function exportExcel(){
-  if(!records.length){toast('Chưa có dữ liệu để xuất','error');return;}
-  const wb=XLSX.utils.book_new();
-  const months=[...new Set(records.map(r=>r.date.substring(0,7)))].sort();
-  months.forEach(ym=>{
-    const [y,m]=ym.split('-');
-    const md=records.filter(r=>r.date.startsWith(ym)).sort((a,b)=>a.date.localeCompare(b.date));
-    const sd=[];
+    cancelImport();
+    const parts = [];
+    if (toAdd.length)       parts.push(`Nhập mới ${toAdd.length} ngày`);
+    if (toOverwrite.length) parts.push(`Ghi đè ${toOverwrite.length} ngày`);
+    if (skipped)            parts.push(`Bỏ qua ${skipped} ngày trùng`);
+    toast('✅ ' + parts.join(' · '),'success');
+    currentPage = 1; showPanel('records');
+  } catch(e) { /* error shown */ }
+};
+
+window.cancelImport = function() {
+  pendingImport = []; dupAction = 'ask'; dupChoices = {};
+  document.getElementById('import-preview').style.display = 'none';
+  document.getElementById('preview-tbody').innerHTML = '';
+};
+
+// ══════════════════════════════════════
+// EXPORT EXCEL
+// ══════════════════════════════════════
+window.exportExcel = function() {
+  if (!records.length) { toast('Chưa có dữ liệu để xuất','error'); return; }
+  const wb = XLSX.utils.book_new();
+  const months = [...new Set(records.map(r => r.date.substring(0,7)))].sort();
+  months.forEach(ym => {
+    const [y,m] = ym.split('-');
+    const md = records.filter(r => r.date.startsWith(ym)).sort((a,b) => a.date.localeCompare(b.date));
+    const sd = [];
     sd.push([`HỘ, CÁ NHÂN KINH DOANH: ${settings.name||'........'}`, '','','Mẫu số S1a-HKD']);
     sd.push([`Địa chỉ: ${settings.address||'.....................................'}`, '','','(Kèm theo Thông tư số 152/2025/TT-BTC']);
     sd.push([`Mã số thuế: ${settings.mst||'.....................................'}`, '','','ngày 31 tháng 12 năm 2025 của Bộ trưởng Bộ Tài chính)']);
@@ -1108,75 +1748,105 @@ function exportExcel(){
     sd.push(['']);
     sd.push(['Ngày tháng','Diễn giải','Số tiền']);
     sd.push(['A','B','1']);
-    md.forEach(r=>sd.push([fmtDVN(r.date),r.items||'Doanh thu bán hàng',r.amount]));
+    md.forEach(r => sd.push([fmtDVN(r.date), r.items||'Doanh thu bán hàng', r.amount]));
     sd.push(['','Tổng cộng',{f:`SUM(C12:C${11+md.length})`}]);
     sd.push(['']);
     sd.push(['','',`Ngày ${new Date().getDate()} tháng ${new Date().getMonth()+1} năm ${new Date().getFullYear()}`]);
     sd.push(['','','NGƯỜI ĐẠI DIỆN HỘ KINH DOANH/CÁ NHÂN KINH DOANH']);
     sd.push(['','','(Ký, ghi rõ họ tên, đóng dấu (nếu có))']);
-    const ws=XLSX.utils.aoa_to_sheet(sd);
-    ws['!cols']=[{wch:16},{wch:50},{wch:18}];
-    ws['!merges']=[{s:{r:0,c:0},e:{r:0,c:2}},{s:{r:1,c:0},e:{r:1,c:2}},{s:{r:2,c:0},e:{r:2,c:2}},{s:{r:4,c:0},e:{r:4,c:2}},{s:{r:5,c:0},e:{r:5,c:2}},{s:{r:6,c:0},e:{r:6,c:2}},{s:{r:7,c:0},e:{r:7,c:2}}];
-    XLSX.utils.book_append_sheet(wb,ws,`T${m}-${y}`);
+    const ws = XLSX.utils.aoa_to_sheet(sd);
+    ws['!cols']   = [{wch:16},{wch:50},{wch:18}];
+    ws['!merges'] = [{s:{r:0,c:0},e:{r:0,c:2}},{s:{r:1,c:0},e:{r:1,c:2}},{s:{r:2,c:0},e:{r:2,c:2}},
+                     {s:{r:4,c:0},e:{r:4,c:2}},{s:{r:5,c:0},e:{r:5,c:2}},{s:{r:6,c:0},e:{r:6,c:2}},{s:{r:7,c:0},e:{r:7,c:2}}];
+    XLSX.utils.book_append_sheet(wb, ws, `T${m}-${y}`);
   });
-  const now=new Date();
-  XLSX.writeFile(wb,`SoDoanThu_S1a_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.xlsx`);
+  const now = new Date();
+  XLSX.writeFile(wb, `SoDoanThu_S1a_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.xlsx`);
   toast('Đã xuất file Excel S1a-HKD','success');
-}
+};
 
-// ═══ BACKUP ═══
-function exportBackup(){
-  const data={records,settings,version:2,exportedAt:new Date().toISOString()};
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`backup_s1a_${new Date().toISOString().split('T')[0]}.json`;a.click();
+// ══════════════════════════════════════
+// BACKUP
+// ══════════════════════════════════════
+window.exportBackup = function() {
+  const data = {records, settings, version:2, exportedAt: new Date().toISOString()};
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `backup_s1a_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
   toast('Đã xuất file sao lưu','success');
-}
-function importBackup(e){
-  const file=e.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    try{
-      const data=JSON.parse(ev.target.result);if(!data.records)throw new Error('File không hợp lệ');
-      const dt=data.exportedAt?new Date(data.exportedAt).toLocaleString('vi'):'không rõ';
-      if(!confirm(`Khôi phục ${data.records.length} bản ghi từ ${dt}?\nDữ liệu hiện tại sẽ bị ghi đè hoàn toàn.`))return;
-      records=data.records;if(data.settings)settings={...settings,...data.settings};
-      saveToStorage();loadSettingsUI();applyTheme();renderAll();
-      toast(`Đã khôi phục ${records.length} bản ghi`,'success');
-    }catch(err){toast('Lỗi đọc file: '+err.message,'error');}
+};
+
+window.importBackup = function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.records) throw new Error('File không hợp lệ');
+      const dt = data.exportedAt ? new Date(data.exportedAt).toLocaleString('vi') : 'không rõ';
+      if (!confirm(`Khôi phục ${data.records.length} bản ghi từ ${dt}?\nDữ liệu hiện tại trên Firestore sẽ bị ghi đè hoàn toàn.`)) return;
+
+      // Delete all current records on Firestore
+      if (records.length) await batchDeleteRecords(records.map(r => r.id));
+      // Upload new records
+      await batchSaveRecords(data.records);
+      if (data.settings) { settings = {...settings,...data.settings}; saveToStorage(); await saveSettingsToFirestore(); loadSettingsUI(); applyTheme(); }
+      toast(`Đã khôi phục ${data.records.length} bản ghi`,'success');
+    } catch(err) { toast('Lỗi đọc file: '+err.message,'error'); }
   };
-  reader.readAsText(file);e.target.value='';
-}
-function clearAllData(){
-  if(!confirm('XÓA TOÀN BỘ dữ liệu? Hành động này không thể hoàn tác!'))return;
-  records=[];saveToStorage();renderAll();toast('Đã xóa toàn bộ dữ liệu','info');
-}
+  reader.readAsText(file); e.target.value='';
+};
 
-// ═══ HELPERS ═══
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmtDVN(d){if(!d)return'—';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+window.clearAllData = async function() {
+  if (!confirm('XÓA TOÀN BỘ dữ liệu trên Firestore?\nHành động này không thể hoàn tác!')) return;
+  try {
+    if (records.length) await batchDeleteRecords(records.map(r => r.id));
+    toast('Đã xóa toàn bộ dữ liệu','info');
+  } catch(e) { toast('Lỗi xóa: '+e.message,'error'); }
+};
 
-function parseDate(raw){
-  if(!raw)return null;
-  if(raw instanceof Date){const d=raw;return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-  const s=String(raw).trim();
-  let m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
-  if(m)return`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
-  m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return s.substring(0,10);
-  const num=parseFloat(s);
-  if(!isNaN(num)&&num>40000&&num<60000){const d=new Date(Math.round((num-25569)*86400*1000));return`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;}
+// ══════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════
+function uid()  { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDVN(d) { if(!d)return'—'; const[y,m,day]=d.split('-'); return`${day}/${m}/${y}`; }
+
+function parseDate(raw) {
+  if (!raw) return null;
+  if (raw instanceof Date) {
+    const d = raw;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  const s = String(raw).trim();
+  let m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if (m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+  m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return s.substring(0,10);
+  const num = parseFloat(s);
+  if (!isNaN(num) && num>40000 && num<60000) {
+    const d = new Date(Math.round((num-25569)*86400*1000));
+    return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
+  }
   return null;
 }
 
-function toast(msg,type='info'){
-  const c=document.getElementById('toast-container');
-  const t=document.createElement('div');
-  t.className=`toast toast-${type}`;
-  const icon={success:'✅',error:'❌',warning:'⚠️',info:'ℹ️'}[type]||'ℹ️';
-  t.innerHTML=`<span>${icon}</span><span>${msg}</span>`;
+window.toast = function(msg, type='info') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  const icon = {success:'✅',error:'❌',warning:'⚠️',info:'ℹ️'}[type]||'ℹ️';
+  t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
   c.appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},4500);
-}
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 4500);
+};
+
+// Keyboard: Enter on login/signup
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('login-email').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('login-pass').focus(); });
+document.getElementById('signup-pass2').addEventListener('keydown', e => { if(e.key==='Enter') doSignup(); });
+
 </script>
 </body>
 </html>
